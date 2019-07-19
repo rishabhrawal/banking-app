@@ -3,6 +3,7 @@ package com.revolut.webapi;
 
 import com.revolut.account.AccountModel;
 import com.revolut.account.AccountService;
+import com.revolut.account.savings.SavingsAccount;
 import com.revolut.account.savings.SavingsAccountService;
 import com.revolut.exception.RevolutException;
 import org.slf4j.Logger;
@@ -11,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import javax.inject.Inject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
+import java.util.List;
 
 
 @Path("/api/v1/account")
@@ -33,7 +35,16 @@ public class SavingsAccountResource {
 
     @GET()
     @Produces(MediaType.APPLICATION_JSON)
-    public AccountModel getAccountDetails(@QueryParam("accountId") Long accountId) throws RevolutException {
+    public List<SavingsAccount> getAllAccounts() throws RevolutException {
+        logger.info("Get all accounts");
+        return accountService.getAllAccounts();
+
+    }
+
+    @GET()
+    @Path("/{accountId}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public AccountModel getAccountDetails(@PathParam("accountId") Long accountId) throws RevolutException {
         logger.info("Account Id: "+accountId);
         return accountService.getAccountDetails(accountId);
 

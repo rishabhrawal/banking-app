@@ -17,7 +17,7 @@ public class ExceptionMapperRevolut implements ExceptionMapper<RevolutException>
 
     @Override
     public Response toResponse(RevolutException ex) {
-        logger.info("Converting exception.....");
+        logger.error(ex.getMessage() +" " + ex.getCause());
         return Response.status(400)
                 .entity("ExceptionMapperRevolut: " + ex.getMessage())
                 .type(MediaType.APPLICATION_JSON_TYPE)

@@ -1,10 +1,13 @@
 package com.revolut.account.savings;
 
 
+import com.revolut.account.Account;
 import com.revolut.account.AccountModel;
 import com.revolut.account.AccountService;
 import com.revolut.account.AccountType;
 import com.revolut.account.lock.LockManager;
+import com.revolut.account.transaction.Transaction;
+import com.revolut.account.transaction.TransactionType;
 import com.revolut.common.AppUtility;
 import com.revolut.exception.InsufficientBalanceException;
 import com.revolut.exception.RevolutException;
@@ -13,8 +16,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
+import javax.persistence.Query;
 import javax.transaction.Transactional;
 import java.time.ZonedDateTime;
+import java.util.Collection;
+import java.util.List;
 import java.util.concurrent.locks.Lock;
 
 //@Service
@@ -45,10 +52,28 @@ public class SavingsAccountService implements AccountService {
         savingsAccount.setClosed(false);
         savingsAccount.setActive(true);
         savingsAccount.credit(0.0);
-        savingsAccount.setOpeningDate(ZonedDateTime.now(AppUtility.LOCAL_ZONE_ID));
-        em.persist(savingsAccount);
+        //savingsAccount.setOpeningDate(ZonedDateTime.now(AppUtility.LOCAL_ZONE_ID));
+        EntityManager em = JpaUtility.getEntityManager();
+        EntityTransaction tx = em.getTransaction();
+        try {
+            tx.begin();
+            em.persist(savingsAccount);
+            tx.commit();
+        } catch (RuntimeException e) {
+            if (tx != null && tx.isActive()) tx.rollback();
+            throw e;
+        } finally {
+            em.close();
+        }
+
         accountModel.setAccountNumber(savingsAccount.getId());
         return accountModel;
+    }
+
+    @Override
+    public List<SavingsAccount> getAllAccounts() {
+        Query query = em.createQuery("SELECT a FROM SavingsAccount a");
+        return (List<SavingsAccount>) query.getResultList();
     }
 
     /**
@@ -58,8 +83,8 @@ public class SavingsAccountService implements AccountService {
     @Override
     @Transactional(Transactional.TxType.REQUIRES_NEW)
     public AccountModel getAccountDetails(long accountId) throws RevolutException {
-        logger.debug("get account details for : "+accountId);
-        logger.debug("Enitity manager: "+em);
+        logger.debug("get account details for : " + accountId);
+        logger.debug("Enitity manager: " + em);
         Lock lock = accountLock.getLockForAccount(accountId).readLock();
         SavingsAccount savingsAccount = null;
         try {
@@ -104,7 +129,7 @@ public class SavingsAccountService implements AccountService {
 
     @Override
     @Transactional(Transactional.TxType.REQUIRES_NEW)
-    public synchronized double debit(double amount, long accountId) throws RevolutException {
+    public double debit(double amount, long accountId) throws RevolutException {
         /*if(amount < 0){
             throw new RevolutException(1, "Debit amount cannot be negative", null);
         }*/
@@ -117,8 +142,16 @@ public class SavingsAccountService implements AccountService {
             if (savingsAccount == null) {
                 throw new RevolutException(1, "Account not found", null);
             }
+
+            Transaction transaction = new Transaction(TransactionType.DEBIT);
+            transaction.setAmount(amount);
+            transaction.setDebitAccount(accountId);
+
+            em.persist(transaction);
             savingsAccount.debit(amount);
             em.persist(savingsAccount);
+            transaction.setStatus(true);
+            em.persist(transaction);
         } finally {
             lock.unlock();
         }
@@ -140,8 +173,16 @@ public class SavingsAccountService implements AccountService {
             if (savingsAccount == null) {
                 throw new RevolutException(1, "Account not found", null);
             }
+
+            Transaction transaction = new Transaction(TransactionType.CREDIT);
+            transaction.setAmount(amount);
+            transaction.setCreditAccount(accountId);
+            transaction.setStatus(false);
+
             savingsAccount.credit(amount);
             em.persist(savingsAccount);
+            transaction.setStatus(true);
+            em.persist(transaction);
         } finally {
             lock.unlock();
         }
@@ -179,10 +220,28 @@ public class SavingsAccountService implements AccountService {
             if (account1.getBalance() < amount) {
                 throw new InsufficientBalanceException(1, "Insufficient Balance in  the account", null);
             }
+
+            //this entry is repeated for debit credit if the transaction  is successful
+            Transaction transaction = new Transaction(TransactionType.TRANSFER);
+            transaction.setAmount(amount);
+            transaction.setDebitAccount(accountId1);
+            transaction.setCreditAccount(accountId2);
+            transaction.setStatus(false);
+            em.persist(transaction);
             account1.debit(amount);
             account2.credit(amount);
-            em.persist(account1);
-            em.persist(account2);
+            EntityTransaction tx = em.getTransaction();
+            try {
+                tx.begin();
+                em.persist(account1);
+                em.persist(account2);
+                tx.commit();
+            } finally {
+                tx.rollback();
+            }
+            transaction.setStatus(true);
+            em.persist(transaction);
+
         } finally {
             lock1.unlock();
             lock2.unlock();
@@ -210,5 +269,14 @@ public class SavingsAccountService implements AccountService {
         }
         return true;
     }
+
+    private AccountModel mapAccountToModel(SavingsAccount account) {
+        AccountModel accountModel = new AccountModel();
+        accountModel.setAccountNumber(account.getId());
+        accountModel.setBalance(account.getBalance());
+        accountModel.setName(account.getName());
+        return accountModel;
+    }
+
 
 }

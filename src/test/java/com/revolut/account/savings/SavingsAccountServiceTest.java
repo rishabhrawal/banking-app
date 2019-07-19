@@ -6,6 +6,7 @@ import com.revolut.account.savings.SavingsAccountService;
 import com.revolut.exception.IllegalAccountStateException;
 import com.revolut.exception.InsufficientBalanceException;
 import com.revolut.exception.RevolutException;
+import org.hibernate.Transaction;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;
@@ -18,6 +19,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.when;
@@ -33,6 +35,9 @@ public class SavingsAccountServiceTest {
 
     @Mock
     EntityManager entityManager;
+
+    @Mock
+    EntityTransaction entityTransaction;
 
     @InjectMocks
     SavingsAccountService savingsAccountService;
@@ -146,6 +151,9 @@ public class SavingsAccountServiceTest {
     @Test(expected = InsufficientBalanceException.class)
     public void transferInsufficientBalance() throws RevolutException {
         SavingsAccount savingsAccount2 = new SavingsAccount();
+        savingsAccount2.setActive(true);
+        savingsAccount2.setClosed(false);
+//        when(entityManager.getTransaction()).thenReturn(entityTransaction);
         when(entityManager.find(SavingsAccount.class, 1L)).thenReturn(savingsAccount);
         when(entityManager.find(SavingsAccount.class, 2L)).thenReturn(savingsAccount2);
         boolean result = savingsAccountService.transfer(51.00, 1L, 2L);
@@ -157,6 +165,7 @@ public class SavingsAccountServiceTest {
         savingsAccount2.setActive(true);
         savingsAccount2.setClosed(false);
         savingsAccount2.credit(11.0);
+        when(entityManager.getTransaction()).thenReturn(entityTransaction);
         when(entityManager.find(SavingsAccount.class, 1L)).thenReturn(savingsAccount);
         when(entityManager.find(SavingsAccount.class, 2L)).thenReturn(savingsAccount2);
         boolean result = savingsAccountService.transfer(50.00, 1L, 2L);

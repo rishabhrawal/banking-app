@@ -18,6 +18,7 @@ import javax.persistence.EntityManager;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.when;
 
+/*
 @RunWith(MockitoJUnitRunner.class)
 public class SavingsAccountServiceMulithreadingTest {
 
@@ -91,13 +92,15 @@ public class SavingsAccountServiceMulithreadingTest {
         savingsAccount2.setActive(true);
         savingsAccount2.setClosed(false);
         savingsAccount2.credit(11.0);
+*/
 /*        when(entityManager.find(SavingsAccount.class, 1L)).thenAnswer(new Answer<SavingsAccount>() {
             @Override
             public SavingsAccount answer(InvocationOnMock invocationOnMock) throws InterruptedException {
                 Thread.sleep(5000);
                 return savingsAccount;
             }
-        });*/
+        });*//*
+
         when(entityManager.find(SavingsAccount.class, 1L)).thenReturn(savingsAccount);
         when(entityManager.find(SavingsAccount.class, 2L)).thenReturn(savingsAccount2);
         boolean resultA = savingsAccountService.transfer(50.00, 1L, 2L);
@@ -105,4 +108,4 @@ public class SavingsAccountServiceMulithreadingTest {
         //assertEquals(0.0, savingsAccount.getBalance(),0.0);
         //assertEquals(61.0, savingsAccount2.getBalance(), 0.0);
     }
-}
+}*/

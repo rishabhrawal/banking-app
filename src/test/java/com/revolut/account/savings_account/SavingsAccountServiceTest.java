@@ -1,8 +1,6 @@
 package com.revolut.account.savings_account;
 
 
-import com.revolut.account.AccountModel;
-import com.revolut.account.transaction.Transaction;
 import com.revolut.account.transaction.TransactionModel;
 import com.revolut.account.transaction.TransactionService;
 import com.revolut.lock.SavingsLockCache;
@@ -20,7 +18,6 @@ import org.slf4j.LoggerFactory;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
-import javax.transaction.TransactionManager;
 import java.math.BigDecimal;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
@@ -100,7 +97,7 @@ public class SavingsAccountServiceTest {
     public void closeAlreadyClosedAccount() {
     }*/
 
-    @Test
+    /*@Test
     public void getBalance() throws RevolutException, ExecutionException {
         BigDecimal balance = savingsAccountService.getBalance(1L);
         assertEquals(50.0, balance.doubleValue(), 0.0);
@@ -118,7 +115,7 @@ public class SavingsAccountServiceTest {
         savingsAccount1.setClosed(true);
         BigDecimal balance = savingsAccountService.getBalance(1L);
         assertEquals(50.0, balance.doubleValue(), 0.0);
-    }
+    }*/
 
 
     @Test(expected = IllegalAccountStateException.class)

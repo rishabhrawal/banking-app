@@ -1,7 +1,7 @@
 package com.revolut;
 
 
-import com.revolut.config.MyApplication;
+import com.revolut.config.MyApplicationConfig;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
@@ -29,7 +29,7 @@ public class App {
                 SavingsAccountResource.class.getCanonicalName());*/
 
         jerseyServlet.setInitParameter("javax.ws.rs.Application",
-                MyApplication.class.getCanonicalName());
+                MyApplicationConfig.class.getCanonicalName());
 
         /*jerseyServlet.setInitParameter("javax.ws.rs.Application",
                 AppInjector.class.getCanonicalName());*/

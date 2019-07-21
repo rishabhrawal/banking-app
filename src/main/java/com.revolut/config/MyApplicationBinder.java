@@ -1,6 +1,7 @@
 package com.revolut.config;
 
 import com.revolut.account.AccountService;
+import com.revolut.account.savings_account.SavingsAccountDao;
 import com.revolut.account.transaction.SavingsTransactionService;
 import com.revolut.account.transaction.TransactionService;
 import com.revolut.lock.SavingsLockCache;
@@ -17,5 +18,6 @@ public class MyApplicationBinder extends AbstractBinder {
         bind(SavingsTransactionService.class).to(TransactionService.class);
         bind(JpaFactory.class).to(JpaFactory.class);
         bind(SavingsLockCache.class).to(SavingsLockCache.class);
+        bind(SavingsAccountDao.class).to(SavingsAccountDao.class);
     }
 }

@@ -16,8 +16,6 @@ public interface AccountService {
 
     AccountModel getAccountDetails(long accountId) throws RevolutException, ExecutionException;
 
-    BigDecimal getBalance(long accountId) throws ExecutionException;
-
     TransactionModel debit(TransactionModel transactionModel) throws RevolutException, ExecutionException;
 
     TransactionModel credit(TransactionModel transactionModel) throws RevolutException, ExecutionException;

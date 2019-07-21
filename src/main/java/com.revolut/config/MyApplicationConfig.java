@@ -9,9 +9,9 @@ import org.glassfish.jersey.server.ResourceConfig;
 
 //@ApplicationPath("/webapi/v1/")
 // extend javax.ws.rs.core.Application
-public class MyApplication extends ResourceConfig {
+public class MyApplicationConfig extends ResourceConfig {
 
-    public MyApplication() {
+    public MyApplicationConfig() {
         register(SavingsAccountResource.class);
         register(TransactionResource.class);
         register(ExceptionMapperRevolut.class);

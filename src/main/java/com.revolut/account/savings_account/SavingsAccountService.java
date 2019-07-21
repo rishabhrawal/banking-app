@@ -9,17 +9,17 @@ import com.revolut.lock.SavingsLockCache;
 import com.revolut.exception.InsufficientBalanceException;
 import com.revolut.exception.RevolutException;
 import com.revolut.common.JpaFactory;
-import lombok.Lombok;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
-import javax.persistence.TypedQuery;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.locks.Lock;
 import java.util.stream.Collectors;
@@ -38,6 +38,9 @@ public class SavingsAccountService implements AccountService {
     @Inject
     private TransactionService transactionService;
 
+    @Inject
+    SavingsAccountDao savingsAccountDao;
+
     /**
      * @param accountModel
      * @return
@@ -48,7 +51,8 @@ public class SavingsAccountService implements AccountService {
         savingsAccount.setName(accountModel.getName());
         savingsAccount.setClosed(false);
         savingsAccount.setActive(true);
-        EntityManager em = jpaFactory.getEntityManager();
+        savingsAccount = savingsAccountDao.saveSavingsAccount(savingsAccount);
+/*        EntityManager em = jpaFactory.getEntityManager();
         EntityTransaction tx = em.getTransaction();
         try {
             tx.begin();
@@ -59,7 +63,7 @@ public class SavingsAccountService implements AccountService {
             throw e;
         } finally {
             em.close();
-        }
+        }*/
 
         TransactionModel transactionModel = new TransactionModel();
         transactionModel.setCreditAccountId(savingsAccount.getId());
@@ -73,9 +77,12 @@ public class SavingsAccountService implements AccountService {
 
     @Override
     public List<AccountModel> getAllAccounts() {
-        EntityManager em = jpaFactory.getEntityManager();
-        TypedQuery<SavingsAccount> query = em.createQuery("SELECT a FROM SavingsAccount a", SavingsAccount.class);
-        return query.getResultList().stream().map(a -> mapAccountToModel(a)).collect(Collectors.toList());
+        List<SavingsAccount> savingsAccountList = savingsAccountDao.getAllAccounts();
+        if (savingsAccountList != null) {
+            return savingsAccountList.stream().map(a -> mapAccountToModel(a)).collect(Collectors.toList());
+        } else {
+            return new ArrayList<>();
+        }
     }
 
     /**
@@ -89,13 +96,13 @@ public class SavingsAccountService implements AccountService {
         SavingsAccount savingsAccount = null;
         try {
             lock.lock();
-            EntityManager em = jpaFactory.getEntityManager();
-            savingsAccount = em.find(SavingsAccount.class, accountId);
+            Optional<SavingsAccount> value = savingsAccountDao.getAccount(accountId);
+            if (!value.isPresent()) {
+                throw new RevolutException(1, "Invalid account id", null);
+            }
+
         } finally {
             lock.unlock();
-        }
-        if (savingsAccount == null) {
-            throw new RevolutException(1, "Invalid account id", null);
         }
         AccountModel accountModel = new AccountModel();
         accountModel.setAccountType(AccountType.SAVINGS);
@@ -106,35 +113,8 @@ public class SavingsAccountService implements AccountService {
         accountModel.setClosed(savingsAccount.getClosed());
         accountModel.setOpeningDate(savingsAccount.getOpeningDate());
         return accountModel;
-        /*
-                AccountModel accountModel = AccountModel.builder().accountType(AccountType.SAVINGS)
-                .accountNumber(savingsAccount.getId())
-                .name(savingsAccount.getName())
-                .balance(savingsAccount.getBalance())
-                .active(savingsAccount.isActive())
-                .closed(savingsAccount.isClosed())
-                .openingDate(savingsAccount.getOpeningDate()).build();
-         */
     }
 
-
-    /**
-     * @param accountId
-     * @return
-     */
-    @Override
-    public BigDecimal getBalance(long accountId) throws ExecutionException {
-        Lock lock = lockCache.getLockForAccount(accountId).readLock();
-        SavingsAccount savingsAccount = null;
-        EntityManager em = jpaFactory.getEntityManager();
-        try {
-            lock.lock();
-            savingsAccount = em.find(SavingsAccount.class, accountId);
-        } finally {
-            lock.unlock();
-        }
-        return savingsAccount.getBalance();
-    }
 
     @Override
     public TransactionModel debit(TransactionModel transactionModel) throws RevolutException, ExecutionException {
@@ -166,7 +146,7 @@ public class SavingsAccountService implements AccountService {
                 transaction.setStatus(true);
                 em.persist(transaction);
                 tx.commit();
-            } catch (RuntimeException e) {
+            } catch (Exception e) {
                 if (tx != null && tx.isActive()) tx.rollback();
                 throw e;
             } finally {
@@ -212,7 +192,7 @@ public class SavingsAccountService implements AccountService {
                 transaction.setStatus(true);
                 em.persist(transaction);
                 tx.commit();
-            } catch (RuntimeException e) {
+            } catch (Exception e) {
                 if (tx != null && tx.isActive()) tx.rollback();
                 throw e;
             } finally {
@@ -267,7 +247,7 @@ public class SavingsAccountService implements AccountService {
                 }
 
                 // check debit account has enough balance
-                if (debitAccount.getBalance().compareTo(amount)<0) {
+                if (debitAccount.getBalance().compareTo(amount) < 0) {
                     throw new InsufficientBalanceException(1, "Insufficient Balance in  the account", null);
                 }
 
@@ -278,7 +258,7 @@ public class SavingsAccountService implements AccountService {
                 transaction.setStatus(true);
                 em.persist(transaction);
                 tx.commit();
-            } catch (RuntimeException e) {
+            } catch (Exception e) {
                 if (tx != null && tx.isActive()) tx.rollback();
                 throw e;
             } finally {

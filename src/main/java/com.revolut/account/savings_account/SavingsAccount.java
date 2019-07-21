@@ -6,11 +6,13 @@ import com.revolut.account.Account;
 import com.revolut.exception.IllegalAccountStateException;
 import com.revolut.exception.InsufficientBalanceException;
 import com.revolut.exception.RevolutException;
+import lombok.Data;
 
 import javax.persistence.Entity;
 import java.math.BigDecimal;
 
 @Entity
+@Data
 public class SavingsAccount extends Account {
 
 

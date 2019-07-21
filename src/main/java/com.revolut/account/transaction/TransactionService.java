@@ -7,6 +7,8 @@ import java.util.List;
  * Transactional data cannot be modified once created
  */
 public interface TransactionService {
-    List<Transaction> getAllTransactions();
-    Transaction getTransaction(long transactionId);
+    List<TransactionModel> getAllTransactions();
+    List<TransactionModel> getAllTransactionsForAccount(long accountId);
+    TransactionModel getTransaction(long transactionId);
+    TransactionModel mapTransactionToModel(Transaction transaction);
 }

@@ -3,6 +3,8 @@ package com.revolut.webapi;
 
 import com.revolut.account.AccountModel;
 import com.revolut.account.AccountService;
+import com.revolut.account.transaction.TransactionModel;
+import com.revolut.account.transaction.TransactionService;
 import com.revolut.exception.RevolutException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,7 +16,7 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 
-@Path("api/v1/account")
+@Path("api/v1/accounts/savings")
 public class SavingsAccountResource {
 
     Logger logger = LoggerFactory.getLogger(SavingsAccountResource.class);
@@ -26,17 +28,8 @@ public class SavingsAccountResource {
     @POST()
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public AccountModel createAccount(AccountModel accountModel) throws RevolutException {
+    public AccountModel createAccount(AccountModel accountModel) throws RevolutException, ExecutionException {
         return accountService.create(accountModel);
-    }
-
-    @GET()
-    @Path("/{accountId}")
-    @Produces(MediaType.APPLICATION_JSON)
-    public AccountModel getAccountDetails(@PathParam("accountId") Long accountId) throws RevolutException, ExecutionException {
-        logger.info("Account Id: "+accountId);
-        return accountService.getAccountDetails(accountId);
-
     }
 
     @GET()
@@ -53,32 +46,41 @@ public class SavingsAccountResource {
         return accountService.close(accountId);
     }
 
-    /*@GET()
-    @Path("/balance")
+    @GET()
+    @Path("/{accountId}")
     @Produces(MediaType.APPLICATION_JSON)
-    public double getAccountBalance(@QueryParam("accountId") Long accountId) {
-        return accountService.getBalance(accountId);
-    }*/
+    public AccountModel getAccountDetails(@PathParam("accountId") Long accountId) throws RevolutException, ExecutionException {
+        logger.info("Account Id: " + accountId);
+        return accountService.getAccountDetails(accountId);
 
-    @POST
-    @Path("/debit")
-    @Produces(MediaType.APPLICATION_JSON)
-    public double debitAccount(Double amount, Long accountId) throws RevolutException, ExecutionException {
-        return accountService.debit(amount, accountId);
     }
+
 
     @POST
     @Path("/credit")
+    @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public double creditAccount(Double amount, Long accountId) throws RevolutException, ExecutionException {
-        return accountService.credit(amount, accountId);
+    public TransactionModel creditAccount( TransactionModel transactionModel) throws RevolutException, ExecutionException {
+        logger.info("Credit, TransactionModel: " + transactionModel);
+        return accountService.credit(transactionModel);
+    }
+
+    @POST
+    @Path("/debit")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public TransactionModel debitAccount(TransactionModel transactionModel) throws RevolutException, ExecutionException {
+        logger.info("Debit, TransactionModel: " + transactionModel);
+        return accountService.debit(transactionModel);
     }
 
     @POST
     @Path("/transfer")
+    @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public boolean transfer(Double amount, Long fromAccountId, Long toAccountId) throws RevolutException, ExecutionException {
-        return accountService.transfer(amount, fromAccountId, toAccountId);
+    public TransactionModel transfer(TransactionModel transactionModel) throws RevolutException, ExecutionException {
+        logger.info("Transfer, TransactionModel: " + transactionModel);
+        return accountService.transfer(transactionModel);
     }
 
 

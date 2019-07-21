@@ -16,10 +16,10 @@ public class ExceptionMapperGeneric implements ExceptionMapper<Exception> {
 
     @Override
     public Response toResponse(Exception ex) {
-        logger.error(ex.getMessage() + ex.getCause());
+        logger.error("Unknown error: ",ex);
         return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
                 .entity("Unknown Error")
-                .type(MediaType.APPLICATION_JSON_TYPE)
+                .type(MediaType.TEXT_PLAIN)
                 .build();
     }
 }

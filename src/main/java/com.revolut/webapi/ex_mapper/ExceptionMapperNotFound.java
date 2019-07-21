@@ -16,10 +16,10 @@ public class ExceptionMapperNotFound implements ExceptionMapper<NotFoundExceptio
 
     @Override
     public Response toResponse(NotFoundException ex) {
-        logger.error(ex.getMessage() + ex.getCause());
+        logger.error("Resource not found", ex);
         return Response.status(Response.Status.NOT_FOUND)
                 .entity("resource not found")
-                .type(MediaType.APPLICATION_JSON_TYPE)
+                .type(MediaType.TEXT_PLAIN)
                 .build();
     }
 }

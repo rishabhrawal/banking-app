@@ -1,5 +1,7 @@
 package com.revolut.config;
 
+import com.revolut.webapi.SavingsAccountResource;
+import com.revolut.webapi.TransactionResource;
 import com.revolut.webapi.ex_mapper.ExceptionMapperGeneric;
 import com.revolut.webapi.ex_mapper.ExceptionMapperNotFound;
 import com.revolut.webapi.ex_mapper.ExceptionMapperRevolut;
@@ -11,7 +13,9 @@ public class MyApplication extends ResourceConfig {
 
     public MyApplication() {
 
-        //packages("com.revolut.webapi");
+        /*packages("com.revolut.webapi");*/
+        register(SavingsAccountResource.class);
+        register(TransactionResource.class);
         register(ExceptionMapperRevolut.class);
         register(ExceptionMapperNotFound.class);
         register(ExceptionMapperGeneric.class);

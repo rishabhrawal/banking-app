@@ -7,6 +7,7 @@
 
         <!--<class>com.revolut.account.Account</class>-->
         <class>com.revolut.account.savings_account.SavingsAccount</class>
+        <class>com.revolut.account.transaction.Transaction</class>
 
         <properties>
             <property name="javax.persistence.jdbc.driver" value="org.h2.Driver" />

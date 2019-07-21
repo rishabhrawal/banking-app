@@ -25,9 +25,9 @@ public class App {
         jerseyServlet.setInitOrder(0);
 
         // Tells the Jersey Servlet which REST service/class to load.
-        jerseyServlet.setInitParameter(
+        /*jerseyServlet.setInitParameter(
                 "jersey.config.server.provider.classnames",
-                SavingsAccountResource.class.getCanonicalName());
+                SavingsAccountResource.class.getCanonicalName());*/
 
         jerseyServlet.setInitParameter("javax.ws.rs.Application",
                 MyApplication.class.getCanonicalName());

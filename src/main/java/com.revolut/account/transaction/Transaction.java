@@ -23,8 +23,8 @@ public class Transaction {
     @GeneratedValue
     private Long id;
     private TransactionType transactionType;
-    private Long debitAccount;
-    private Long creditAccount;
+    private Long debitAccountId;
+    private Long creditAccountId;
     private Double amount;
     private LocalDateTime dateTime;
     private Boolean status;

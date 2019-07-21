@@ -1,6 +1,7 @@
 package com.revolut.account;
 
 
+import com.revolut.account.transaction.TransactionModel;
 import com.revolut.exception.RevolutException;
 
 import java.util.List;
@@ -8,7 +9,7 @@ import java.util.concurrent.ExecutionException;
 
 //@Contract
 public interface AccountService {
-    AccountModel create(AccountModel accountModel) throws RevolutException;
+    AccountModel create(AccountModel accountModel) throws RevolutException, ExecutionException;
 
     List<AccountModel> getAllAccounts();
 
@@ -16,13 +17,13 @@ public interface AccountService {
 
     double getBalance(long accountId) throws ExecutionException;
 
-    double debit(double amount, long accountId) throws RevolutException, ExecutionException;
+    TransactionModel debit(TransactionModel transactionModel) throws RevolutException, ExecutionException;
 
-    double credit(double amount, long accountId) throws RevolutException, ExecutionException;
+    TransactionModel credit(TransactionModel transactionModel) throws RevolutException, ExecutionException;
+
+    TransactionModel transfer(TransactionModel transactionModel) throws RevolutException, ExecutionException;
 
     boolean close(long accountId) throws ExecutionException;
-
-    boolean transfer(double amount, long account1, long account2) throws RevolutException, ExecutionException;
 
     static void validateAmount(double amount) throws RevolutException {
         if (amount < 0.0) {

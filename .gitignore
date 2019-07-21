@@ -71,3 +71,6 @@ buildNumber.properties
 */node_modules/*
 */dist/*
 
+### logs ##
+*log*.txt
+

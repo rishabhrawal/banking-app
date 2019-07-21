@@ -1,6 +1,10 @@
 package com.revolut.account.savings_account;
 
 
+import com.revolut.account.AccountModel;
+import com.revolut.account.transaction.Transaction;
+import com.revolut.account.transaction.TransactionModel;
+import com.revolut.account.transaction.TransactionService;
 import com.revolut.lock.SavingsLockCache;
 import com.revolut.common.JpaFactory;
 import com.revolut.exception.IllegalAccountStateException;
@@ -15,6 +19,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
+import javax.transaction.TransactionManager;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
@@ -35,6 +41,9 @@ public class SavingsAccountServiceTest {
     @Mock
     SavingsLockCache lockCache;
 
+    @Mock
+    TransactionService transactionService;
+
     @InjectMocks
     SavingsAccountService savingsAccountService;
 
@@ -49,7 +58,9 @@ public class SavingsAccountServiceTest {
     @Before
     public void setUp() throws Exception {
         EntityManager entityManager = mock(EntityManager.class);
+        EntityTransaction entityTransaction = mock(EntityTransaction.class);
         when(jpaFactory.getEntityManager()).thenReturn(entityManager);
+        when(entityManager.getTransaction()).thenReturn(entityTransaction);
         when(lockCache.getLockForAccount(any())).thenReturn(new ReentrantReadWriteLock());
 
         savingsAccount1 = new SavingsAccount();
@@ -112,55 +123,84 @@ public class SavingsAccountServiceTest {
     @Test(expected = IllegalAccountStateException.class)
     public void debitInactiveAccountException() throws RevolutException, ExecutionException {
         savingsAccount1.setActive(false);
-        savingsAccountService.debit(20.00, 1L);
+        TransactionModel transactionModel = new TransactionModel();
+        transactionModel.setDebitAccountId(1L);
+        transactionModel.setAmount(20.00);
+        savingsAccountService.debit(transactionModel);
     }
 
     @Test(expected = IllegalAccountStateException.class)
     public void debitClosedAccountException() throws RevolutException, ExecutionException {
         savingsAccount1.setClosed(true);
-        savingsAccountService.debit(20.00, 1L);
+        TransactionModel transactionModel = new TransactionModel();
+        transactionModel.setDebitAccountId(1L);
+        transactionModel.setAmount(20.00);
+        savingsAccountService.debit(transactionModel);
     }
 
     @Test(expected = InsufficientBalanceException.class)
     public void debitInsufficientBalanceException() throws RevolutException, ExecutionException {
-        savingsAccountService.debit(51, 1L);
+        TransactionModel transactionModel = new TransactionModel();
+        transactionModel.setDebitAccountId(1L);
+        transactionModel.setAmount(51.00);
+        savingsAccountService.debit(transactionModel);
     }
 
     @Test
     public void debit() throws RevolutException, ExecutionException {
-        double balance = savingsAccountService.debit(50.00, 1L);
-        assertEquals(00.00, balance, 00);
+        TransactionModel transactionModel = new TransactionModel();
+        transactionModel.setDebitAccountId(1L);
+        transactionModel.setAmount(50.00);
+        savingsAccountService.debit(transactionModel);
+        assertEquals(00.00, savingsAccount1.getBalance(), 00);
     }
 
     @Test(expected = IllegalAccountStateException.class)
     public void creditInactiveAccountException() throws RevolutException, ExecutionException {
         savingsAccount1.setActive(false);
-        savingsAccountService.credit(20.00, 1L);
+        TransactionModel transactionModel = new TransactionModel();
+        transactionModel.setCreditAccountId(1L);
+        transactionModel.setAmount(20.00);
+        savingsAccountService.credit(transactionModel);
     }
 
     @Test(expected = IllegalAccountStateException.class)
     public void creditClosedAccountException() throws RevolutException, ExecutionException {
         savingsAccount1.setClosed(true);
         savingsAccount1.credit(0);
-        savingsAccountService.credit(20.00, 1L);
+        TransactionModel transactionModel = new TransactionModel();
+        transactionModel.setCreditAccountId(1L);
+        transactionModel.setAmount(20.00);
+        savingsAccountService.credit(transactionModel);
     }
 
     @Test
     public void credit() throws RevolutException, ExecutionException {
-        double balance = savingsAccountService.credit(20.00, 1L);
-        assertEquals(70.00, balance, 0.0);
+        TransactionModel transactionModel = new TransactionModel();
+        transactionModel.setCreditAccountId(1L);
+        transactionModel.setAmount(20.00);
+        savingsAccountService.credit(transactionModel);
+        assertEquals(70.00, savingsAccount1.getBalance(), 0.0);
     }
 
 
     @Test(expected = InsufficientBalanceException.class)
     public void transferInsufficientBalance() throws RevolutException, ExecutionException {
-        boolean result = savingsAccountService.transfer(51.00, 1L, 2L);
+        TransactionModel transactionModel = new TransactionModel();
+        transactionModel.setDebitAccountId(1L);
+        transactionModel.setCreditAccountId(2L);
+        transactionModel.setAmount(51.00);
+        savingsAccountService.transfer(transactionModel);
     }
 
     @Test
     public void transfer() throws RevolutException, ExecutionException {
         savingsAccount2.credit(11.0);
-        boolean result = savingsAccountService.transfer(50.00, 1L, 2L);
+        TransactionModel transactionModel = new TransactionModel();
+        transactionModel.setDebitAccountId(1L);
+        transactionModel.setCreditAccountId(2L);
+        transactionModel.setAmount(50.00);
+        savingsAccountService.transfer(transactionModel);
         assertEquals(0.0, savingsAccount1.getBalance(), 0.0);
         assertEquals(61.0, savingsAccount2.getBalance(), 0.0);
     }

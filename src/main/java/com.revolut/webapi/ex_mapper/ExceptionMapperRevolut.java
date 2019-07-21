@@ -15,10 +15,10 @@ public class ExceptionMapperRevolut implements ExceptionMapper<RevolutException>
 
     @Override
     public Response toResponse(RevolutException ex) {
-        logger.error(ex.getMessage() +" " + ex.getCause());
+        logger.error("Revolut Exception",ex);
         return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                .entity("Application error " + ex.getMessage())
-                .type(MediaType.APPLICATION_JSON_TYPE)
+                .entity("Business Error: " + ex.getMessage())
+                .type(MediaType.TEXT_PLAIN)
                 .build();
     }
 }

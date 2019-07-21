@@ -12,8 +12,6 @@ import org.glassfish.jersey.server.ResourceConfig;
 public class MyApplication extends ResourceConfig {
 
     public MyApplication() {
-
-        /*packages("com.revolut.webapi");*/
         register(SavingsAccountResource.class);
         register(TransactionResource.class);
         register(ExceptionMapperRevolut.class);
@@ -21,11 +19,6 @@ public class MyApplication extends ResourceConfig {
         register(ExceptionMapperGeneric.class);
         register(new MyApplicationBinder());
     }
-
-    /*public Set<Class<?>> getClasses() {
-        return new HashSet<Class<?>>(Arrays.asList(SavingsAccountResource.class, MyResource.class,
-                ExceptionMapperRevolut.class, ExceptionMapperNotFound.class, ExceptionMapperGeneric.class));
-    }*/
 
 }
 

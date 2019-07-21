@@ -1,6 +1,5 @@
 package com.revolut.webapi;
 
-import com.revolut.account.AccountService;
 import com.revolut.account.transaction.TransactionModel;
 import com.revolut.account.transaction.TransactionService;
 import org.slf4j.Logger;

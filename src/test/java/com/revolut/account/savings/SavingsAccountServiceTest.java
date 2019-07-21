@@ -2,7 +2,6 @@ package com.revolut.account.savings;
 
 
 import com.revolut.lock.SavingsLockCache;
-import com.revolut.lock.SavingsLockManager;
 import com.revolut.common.JpaFactory;
 import com.revolut.exception.IllegalAccountStateException;
 import com.revolut.exception.InsufficientBalanceException;
@@ -34,7 +33,7 @@ public class SavingsAccountServiceTest {
     JpaFactory jpaFactory;
 
     @Mock
-    SavingsLockCache lockManager;
+    SavingsLockCache lockCache;
 
     @InjectMocks
     SavingsAccountService savingsAccountService;
@@ -51,7 +50,7 @@ public class SavingsAccountServiceTest {
     public void setUp() throws Exception {
         EntityManager entityManager = mock(EntityManager.class);
         when(jpaFactory.getEntityManager()).thenReturn(entityManager);
-        when(lockManager.getLockForAccount(any())).thenReturn(new ReentrantReadWriteLock());
+        when(lockCache.getLockForAccount(any())).thenReturn(new ReentrantReadWriteLock());
 
         savingsAccount1 = new SavingsAccount();
         savingsAccount1.setId(1L);

@@ -5,7 +5,6 @@ import com.revolut.account.AccountModel;
 import com.revolut.account.AccountService;
 import com.revolut.account.AccountType;
 import com.revolut.lock.SavingsLockCache;
-import com.revolut.lock.SavingsLockManager;
 import com.revolut.transaction.Transaction;
 import com.revolut.transaction.TransactionType;
 import com.revolut.exception.InsufficientBalanceException;
@@ -31,11 +30,8 @@ public class SavingsAccountService implements AccountService {
     @Inject
     JpaFactory jpaFactory;
 
-    //@Inject
-    //SavingsLockManager lockManager;
-
     @Inject
-    SavingsLockCache lockManager;
+    SavingsLockCache lockCache;
 
     /**
      * @param accountModel
@@ -80,7 +76,7 @@ public class SavingsAccountService implements AccountService {
     @Override
     public AccountModel getAccountDetails(long accountId) throws RevolutException, ExecutionException {
         logger.debug("get account details for : " + accountId);
-        Lock lock = lockManager.getLockForAccount(accountId).readLock();
+        Lock lock = lockCache.getLockForAccount(accountId).readLock();
         SavingsAccount savingsAccount = null;
         try {
             lock.lock();
@@ -111,7 +107,7 @@ public class SavingsAccountService implements AccountService {
      */
     @Override
     public synchronized double getBalance(long accountId) throws ExecutionException {
-        Lock lock = lockManager.getLockForAccount(accountId).readLock();
+        Lock lock = lockCache.getLockForAccount(accountId).readLock();
         SavingsAccount savingsAccount = null;
         EntityManager em = jpaFactory.getEntityManager();
         try {
@@ -126,7 +122,7 @@ public class SavingsAccountService implements AccountService {
     @Override
     public double debit(double amount, long accountId) throws RevolutException, ExecutionException {
         AccountService.validateAmount(amount);
-        Lock lock = lockManager.getLockForAccount(accountId).writeLock();
+        Lock lock = lockCache.getLockForAccount(accountId).writeLock();
         SavingsAccount savingsAccount;
         try {
             lock.lock();
@@ -165,7 +161,7 @@ public class SavingsAccountService implements AccountService {
     public double credit(double amount, long accountId) throws RevolutException, ExecutionException {
         AccountService.validateAmount(amount);
         SavingsAccount savingsAccount = null;
-        Lock lock = lockManager.getLockForAccount(accountId).writeLock();
+        Lock lock = lockCache.getLockForAccount(accountId).writeLock();
         try {
             lock.lock();
             EntityManager em = jpaFactory.getEntityManager();
@@ -193,8 +189,8 @@ public class SavingsAccountService implements AccountService {
     @Override
     public boolean transfer(double amount, long accountId1, long accountId2) throws RevolutException, ExecutionException {
         AccountService.validateAmount(amount);
-        Lock lock1 = lockManager.getLockForAccount(accountId1).writeLock();
-        Lock lock2 = lockManager.getLockForAccount(accountId2).writeLock();
+        Lock lock1 = lockCache.getLockForAccount(accountId1).writeLock();
+        Lock lock2 = lockCache.getLockForAccount(accountId2).writeLock();
         try {
             //maintain locking order to avoid deadlock
             if (accountId1 > accountId2) {
@@ -246,7 +242,7 @@ public class SavingsAccountService implements AccountService {
      */
     @Override
     public synchronized boolean close(long accountId) throws ExecutionException {
-        Lock lock = lockManager.getLockForAccount(accountId).writeLock();
+        Lock lock = lockCache.getLockForAccount(accountId).writeLock();
         SavingsAccount savingsAccount = null;
         try {
             lock.lock();

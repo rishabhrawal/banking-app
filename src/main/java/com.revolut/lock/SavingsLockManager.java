@@ -10,21 +10,12 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 public class SavingsLockManager {
 
     public static final int NUMBER_OF_STRIPES = 1000;
-    Striped<Lock> stripedLock = Striped.lock(NUMBER_OF_STRIPES);
-    WeakHashMap<Long, ReadWriteLock> lockMap = new WeakHashMap<>();
+    private Striped<Lock> stripedLock = Striped.lock(NUMBER_OF_STRIPES);
+    private WeakHashMap<Long, ReadWriteLock> lockMap = new WeakHashMap<>();
 
     public ReadWriteLock getLockForAccount(Long accountId) {
         ReadWriteLock readWriteLock = lockMap.get(accountId);
         if (readWriteLock == null) {
-            /*synchronized (this) {
-                lock = locks.get(accountId);
-                if(lock==null) {
-                    lock =  new ReentrantReadWriteLock();
-                    locks.put(accountId, lock);
-                }
-                //lock =  new ReentrantReadWriteLock();
-                //locks.putIfAbsent(accountId,lock);
-            }*/
             Lock lock = stripedLock.getAt(accountId.hashCode());
             try {
                 lock.lock();

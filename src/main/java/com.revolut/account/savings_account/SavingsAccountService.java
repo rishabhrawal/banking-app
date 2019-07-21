@@ -1,12 +1,12 @@
-package com.revolut.account.savings;
+package com.revolut.account.savings_account;
 
 
 import com.revolut.account.AccountModel;
 import com.revolut.account.AccountService;
 import com.revolut.account.AccountType;
 import com.revolut.lock.SavingsLockCache;
-import com.revolut.transaction.Transaction;
-import com.revolut.transaction.TransactionType;
+import com.revolut.account.transaction.Transaction;
+import com.revolut.account.transaction.TransactionType;
 import com.revolut.exception.InsufficientBalanceException;
 import com.revolut.exception.RevolutException;
 import com.revolut.common.JpaFactory;

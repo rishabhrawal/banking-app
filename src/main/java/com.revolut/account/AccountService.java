@@ -1,12 +1,10 @@
 package com.revolut.account;
 
 
-import com.revolut.account.savings.SavingsAccount;
 import com.revolut.exception.RevolutException;
 
 import java.util.List;
 import java.util.concurrent.ExecutionException;
-//import org.jvnet.hk2.annotations.Contract;
 
 //@Contract
 public interface AccountService {

@@ -1,4 +1,4 @@
-package com.revolut.transaction;
+package com.revolut.account.transaction;
 
 import lombok.Data;
 

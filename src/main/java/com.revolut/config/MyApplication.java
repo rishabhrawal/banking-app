@@ -1,9 +1,9 @@
 package com.revolut.config;
 
-import com.revolut.webapi.*;
+import com.revolut.webapi.ex_mapper.ExceptionMapperGeneric;
+import com.revolut.webapi.ex_mapper.ExceptionMapperNotFound;
+import com.revolut.webapi.ex_mapper.ExceptionMapperRevolut;
 import org.glassfish.jersey.server.ResourceConfig;
-
-import javax.ws.rs.ApplicationPath;
 
 //@ApplicationPath("/webapi/v1/")
 // extend javax.ws.rs.core.Application

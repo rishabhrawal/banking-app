@@ -6,3 +6,6 @@ https://codete.com/blog/5-common-spring-transactional-pitfalls/
 
 #Concurrency
 https://plumbr.io/blog/locked-threads/improving-lock-performance-in-java
+
+
+Package structure is Domain driven rather than layered

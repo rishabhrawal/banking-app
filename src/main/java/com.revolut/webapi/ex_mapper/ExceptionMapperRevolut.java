@@ -1,4 +1,4 @@
-package com.revolut.webapi;
+package com.revolut.webapi.ex_mapper;
 
 import com.revolut.exception.RevolutException;
 import org.slf4j.Logger;

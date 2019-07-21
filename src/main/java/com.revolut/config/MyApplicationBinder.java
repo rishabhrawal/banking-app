@@ -3,7 +3,7 @@ package com.revolut.config;
 import com.revolut.account.AccountService;
 import com.revolut.lock.SavingsLockCache;
 import com.revolut.lock.SavingsLockManager;
-import com.revolut.account.savings.SavingsAccountService;
+import com.revolut.account.savings_account.SavingsAccountService;
 import com.revolut.common.JpaFactory;
 import org.glassfish.hk2.utilities.binding.AbstractBinder;
 

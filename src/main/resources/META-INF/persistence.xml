@@ -6,7 +6,7 @@
         <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
 
         <!--<class>com.revolut.account.Account</class>-->
-        <class>com.revolut.account.savings.SavingsAccount</class>
+        <class>com.revolut.account.savings_account.SavingsAccount</class>
 
         <properties>
             <property name="javax.persistence.jdbc.driver" value="org.h2.Driver" />

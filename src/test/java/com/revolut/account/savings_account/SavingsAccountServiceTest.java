@@ -1,4 +1,4 @@
-package com.revolut.account.savings;
+package com.revolut.account.savings_account;
 
 
 import com.revolut.lock.SavingsLockCache;

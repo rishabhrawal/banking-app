@@ -1,7 +1,6 @@
 package com.revolut.account;
 
 
-import com.revolut.lock.SavingsLockManager;
 import com.revolut.exception.RevolutException;
 import lombok.Data;
 

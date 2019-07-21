@@ -1,7 +1,6 @@
 package com.revolut;
 
 
-import com.revolut.config.AppInjector;
 import com.revolut.config.MyApplication;
 import com.revolut.webapi.SavingsAccountResource;
 import org.eclipse.jetty.server.Server;

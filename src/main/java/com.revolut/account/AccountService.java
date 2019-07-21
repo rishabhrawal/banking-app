@@ -5,25 +5,26 @@ import com.revolut.account.savings.SavingsAccount;
 import com.revolut.exception.RevolutException;
 
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 //import org.jvnet.hk2.annotations.Contract;
 
 //@Contract
 public interface AccountService {
     AccountModel create(AccountModel accountModel) throws RevolutException;
 
-    List<SavingsAccount> getAllAccounts();
+    List<AccountModel> getAllAccounts();
 
-    AccountModel getAccountDetails(long accountId) throws RevolutException;
+    AccountModel getAccountDetails(long accountId) throws RevolutException, ExecutionException;
 
-    double getBalance(long accountId);
+    double getBalance(long accountId) throws ExecutionException;
 
-    double debit(double amount, long accountId) throws RevolutException;
+    double debit(double amount, long accountId) throws RevolutException, ExecutionException;
 
-    double credit(double amount, long accountId) throws RevolutException;
+    double credit(double amount, long accountId) throws RevolutException, ExecutionException;
 
-    boolean close(long accountId);
+    boolean close(long accountId) throws ExecutionException;
 
-    boolean transfer(double amount, long account1, long account2) throws RevolutException;
+    boolean transfer(double amount, long account1, long account2) throws RevolutException, ExecutionException;
 
     static void validateAmount(double amount) throws RevolutException {
         if (amount < 0.0) {

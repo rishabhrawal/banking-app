@@ -13,6 +13,7 @@ import java.math.BigDecimal;
 @Entity
 public class SavingsAccount extends Account {
 
+
     @Override
     public double debit(double amount) throws RevolutException {
         checkAccountValidity();

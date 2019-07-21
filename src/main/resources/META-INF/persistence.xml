@@ -5,7 +5,7 @@
     <persistence-unit name="accountService" transaction-type="RESOURCE_LOCAL">
         <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
 
-        <class>com.revolut.account.Account</class>
+        <!--<class>com.revolut.account.Account</class>-->
         <class>com.revolut.account.savings.SavingsAccount</class>
 
         <properties>

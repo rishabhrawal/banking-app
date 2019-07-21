@@ -1,4 +1,4 @@
-package com.revolut.account.lock;
+package com.revolut.lock;
 
 import com.google.common.util.concurrent.Striped;
 
@@ -7,10 +7,10 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
-public class LockManager {
+public class SavingsLockManager {
 
     public static final int NUMBER_OF_STRIPES = 1000;
-    Striped<Lock> sripedLock = Striped.lock(NUMBER_OF_STRIPES);
+    Striped<Lock> stripedLock = Striped.lock(NUMBER_OF_STRIPES);
     WeakHashMap<Long, ReadWriteLock> lockMap = new WeakHashMap<>();
 
     public ReadWriteLock getLockForAccount(Long accountId) {
@@ -25,7 +25,7 @@ public class LockManager {
                 //lock =  new ReentrantReadWriteLock();
                 //locks.putIfAbsent(accountId,lock);
             }*/
-            Lock lock = sripedLock.getAt(accountId.hashCode());
+            Lock lock = stripedLock.getAt(accountId.hashCode());
             try {
                 lock.lock();
                 readWriteLock = new ReentrantReadWriteLock();

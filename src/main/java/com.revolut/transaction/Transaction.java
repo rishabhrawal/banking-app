@@ -1,4 +1,4 @@
-package com.revolut.account.transaction;
+package com.revolut.transaction;
 
 import lombok.Data;
 
@@ -28,6 +28,6 @@ public class Transaction {
     private Double amount;
     private LocalDateTime dateTime;
     private Boolean status;
-
+    private String description;
 
 }

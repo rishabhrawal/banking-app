@@ -9,6 +9,7 @@ import com.revolut.lock.SavingsLockCache;
 import com.revolut.exception.InsufficientBalanceException;
 import com.revolut.exception.RevolutException;
 import com.revolut.common.JpaFactory;
+import lombok.Lombok;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -16,6 +17,7 @@ import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 import javax.persistence.TypedQuery;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -25,16 +27,16 @@ import java.util.stream.Collectors;
 
 public class SavingsAccountService implements AccountService {
 
-    Logger logger = LoggerFactory.getLogger(SavingsAccountService.class);
+    private static final Logger logger = LoggerFactory.getLogger(SavingsAccountService.class);
 
     @Inject
-    JpaFactory jpaFactory;
+    private JpaFactory jpaFactory;
 
     @Inject
-    SavingsLockCache lockCache;
+    private SavingsLockCache lockCache;
 
     @Inject
-    TransactionService transactionService;
+    private TransactionService transactionService;
 
     /**
      * @param accountModel
@@ -100,11 +102,19 @@ public class SavingsAccountService implements AccountService {
         accountModel.setAccountNumber(savingsAccount.getId());
         accountModel.setBalance(savingsAccount.getBalance());
         accountModel.setName(savingsAccount.getName());
-        accountModel.setActive(savingsAccount.isActive());
-        accountModel.setClosed(savingsAccount.isClosed());
+        accountModel.setActive(savingsAccount.getActive());
+        accountModel.setClosed(savingsAccount.getClosed());
         accountModel.setOpeningDate(savingsAccount.getOpeningDate());
         return accountModel;
-        //return Optional.ofNullable(accountModel);
+        /*
+                AccountModel accountModel = AccountModel.builder().accountType(AccountType.SAVINGS)
+                .accountNumber(savingsAccount.getId())
+                .name(savingsAccount.getName())
+                .balance(savingsAccount.getBalance())
+                .active(savingsAccount.isActive())
+                .closed(savingsAccount.isClosed())
+                .openingDate(savingsAccount.getOpeningDate()).build();
+         */
     }
 
 
@@ -113,7 +123,7 @@ public class SavingsAccountService implements AccountService {
      * @return
      */
     @Override
-    public synchronized double getBalance(long accountId) throws ExecutionException {
+    public BigDecimal getBalance(long accountId) throws ExecutionException {
         Lock lock = lockCache.getLockForAccount(accountId).readLock();
         SavingsAccount savingsAccount = null;
         EntityManager em = jpaFactory.getEntityManager();
@@ -129,7 +139,7 @@ public class SavingsAccountService implements AccountService {
     @Override
     public TransactionModel debit(TransactionModel transactionModel) throws RevolutException, ExecutionException {
         long accountId = transactionModel.getDebitAccountId();
-        double amount = transactionModel.getAmount();
+        BigDecimal amount = transactionModel.getAmount();
         AccountService.validateAmount(amount);
         Lock lock = lockCache.getLockForAccount(accountId).writeLock();
         SavingsAccount savingsAccount = null;
@@ -173,7 +183,7 @@ public class SavingsAccountService implements AccountService {
     public TransactionModel credit(TransactionModel transactionModel) throws RevolutException, ExecutionException {
 
         long accountId = transactionModel.getCreditAccountId();
-        double amount = transactionModel.getAmount();
+        BigDecimal amount = transactionModel.getAmount();
 
         AccountService.validateAmount(amount);
         SavingsAccount savingsAccount = null;
@@ -220,7 +230,7 @@ public class SavingsAccountService implements AccountService {
 
         long debitAccountId = transactionModel.getDebitAccountId();
         long creditAccountId = transactionModel.getCreditAccountId();
-        double amount = transactionModel.getAmount();
+        BigDecimal amount = transactionModel.getAmount();
         AccountService.validateAmount(amount);
 
 
@@ -256,8 +266,8 @@ public class SavingsAccountService implements AccountService {
                     throw new RevolutException(1, "Account(" + creditAccountId + ") not found", null);
                 }
 
-                // check account 1 has enough balance
-                if (debitAccount.getBalance() < amount) {
+                // check debit account has enough balance
+                if (debitAccount.getBalance().compareTo(amount)<0) {
                     throw new InsufficientBalanceException(1, "Insufficient Balance in  the account", null);
                 }
 
@@ -279,7 +289,7 @@ public class SavingsAccountService implements AccountService {
             lock1.unlock();
             lock2.unlock();
         }
-        return transactionService.mapTransactionToModel(transaction); //mapAccountToModel(savingsAccount);
+        return transactionService.mapTransactionToModel(transaction);
     }
 
     /**
@@ -287,7 +297,7 @@ public class SavingsAccountService implements AccountService {
      * @return
      */
     @Override
-    public synchronized boolean close(long accountId) throws ExecutionException {
+    public Boolean close(long accountId) throws ExecutionException {
         Lock lock = lockCache.getLockForAccount(accountId).writeLock();
         SavingsAccount savingsAccount = null;
         try {
@@ -319,8 +329,8 @@ public class SavingsAccountService implements AccountService {
             return accountModel;
         }
         accountModel.setAccountType(account.getAccountType());
-        accountModel.setActive(account.isActive());
-        accountModel.setClosed(account.isClosed());
+        accountModel.setActive(account.getActive());
+        accountModel.setClosed(account.getClosed());
         accountModel.setAccountNumber(account.getId());
         accountModel.setBalance(account.getBalance());
         accountModel.setName(account.getName());

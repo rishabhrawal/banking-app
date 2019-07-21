@@ -7,6 +7,7 @@ import lombok.Data;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Data
@@ -15,20 +16,20 @@ public abstract class Account {
 
     @Id
     @GeneratedValue
-    private long id;
+    private Long id;
     private LocalDateTime openingDate;
     private LocalDateTime closingDate;
-    private boolean active;
-    private boolean closed;
+    private Boolean active;
+    private Boolean closed;
     private String name;
-    private double balance;
+    private BigDecimal balance;
     private AccountType accountType;
 
-    protected final void setBalance(double balance) {
+    protected final void setBalance(BigDecimal balance) {
         this.balance = balance;
     }
 
-    public abstract double debit(double amount) throws RevolutException;
+    public abstract BigDecimal debit(BigDecimal amount) throws RevolutException;
 
-    public abstract double credit(double amount) throws RevolutException;
+    public abstract BigDecimal credit(BigDecimal amount) throws RevolutException;
 }

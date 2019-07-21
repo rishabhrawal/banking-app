@@ -6,44 +6,47 @@ import com.revolut.account.Account;
 import com.revolut.exception.IllegalAccountStateException;
 import com.revolut.exception.InsufficientBalanceException;
 import com.revolut.exception.RevolutException;
-import lombok.Data;
 
 import javax.persistence.Entity;
 import java.math.BigDecimal;
 
+
 @Entity
-@Data
 public class SavingsAccount extends Account {
 
 
     @Override
-    public double debit(double amount) throws RevolutException {
+    public BigDecimal debit(BigDecimal amount) throws RevolutException {
         checkAccountValidity();
-        BigDecimal bigAmount = new BigDecimal(amount);
-        BigDecimal bigBalance = new BigDecimal(getBalance());
-        if (bigBalance.compareTo(bigAmount) < 0) {
+        BigDecimal balance = getBalance();
+        if(balance==null){
+            throw new InsufficientBalanceException(1, "Invalid Balance", null);
+        }
+        if (balance.compareTo(amount) < 0) {
             throw new InsufficientBalanceException(1, "Insufficient Balance", null);
         }
-        double balance = bigBalance.subtract(bigAmount).doubleValue();
+        balance = balance.subtract(amount);
         setBalance(balance);
         return balance;
     }
 
     @Override
-    public double credit(double amount) throws RevolutException {
+    public BigDecimal credit(BigDecimal amount) throws RevolutException {
         checkAccountValidity();
-        BigDecimal bigAmount = new BigDecimal(amount);
-        BigDecimal bigBalance = new BigDecimal(getBalance());
-        double balance = bigBalance.add(bigAmount).doubleValue();
+        BigDecimal balance = getBalance();
+        if(balance==null){
+            balance = new BigDecimal(0);
+        }
+        balance = balance.add(amount);
         setBalance(balance);
         return balance;
     }
 
     private boolean checkAccountValidity() throws RevolutException {
-        if (isClosed()) {
+        if (getClosed()) {
             throw new IllegalAccountStateException(1, "Account is closed", null);
         }
-        if (!isActive()) {
+        if (!getActive()) {
             throw new IllegalAccountStateException(1, "Account is Inactive", null);
         }
         return true;

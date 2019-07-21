@@ -4,6 +4,7 @@ package com.revolut.account;
 import com.revolut.account.transaction.TransactionModel;
 import com.revolut.exception.RevolutException;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
@@ -15,7 +16,7 @@ public interface AccountService {
 
     AccountModel getAccountDetails(long accountId) throws RevolutException, ExecutionException;
 
-    double getBalance(long accountId) throws ExecutionException;
+    BigDecimal getBalance(long accountId) throws ExecutionException;
 
     TransactionModel debit(TransactionModel transactionModel) throws RevolutException, ExecutionException;
 
@@ -23,10 +24,13 @@ public interface AccountService {
 
     TransactionModel transfer(TransactionModel transactionModel) throws RevolutException, ExecutionException;
 
-    boolean close(long accountId) throws ExecutionException;
+    Boolean close(long accountId) throws ExecutionException;
 
-    static void validateAmount(double amount) throws RevolutException {
-        if (amount < 0.0) {
+    static void validateAmount(BigDecimal amount) throws RevolutException {
+        if(amount==null){
+            throw new RevolutException(1, "Invalid transaction amount", null);
+        }
+        if (amount.doubleValue() < 0.0) {
             throw new RevolutException(1, "Transaction amount cannot be negative", null);
         }
     }

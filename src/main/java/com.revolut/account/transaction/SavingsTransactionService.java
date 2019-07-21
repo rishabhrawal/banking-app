@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 public class SavingsTransactionService implements TransactionService {
 
     @Inject
-    JpaFactory jpaFactory;
+    private JpaFactory jpaFactory;
 
     @Override
     public List<TransactionModel> getAllTransactions() {

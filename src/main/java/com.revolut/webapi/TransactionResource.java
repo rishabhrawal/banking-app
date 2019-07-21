@@ -15,11 +15,11 @@ import java.util.List;
 @Path("api/v1/accounts/savings/transactions")
 public class TransactionResource {
 
-    Logger logger = LoggerFactory.getLogger(TransactionResource.class);
+    private static final Logger logger = LoggerFactory.getLogger(TransactionResource.class);
 
 
     @Inject
-    TransactionService transactionService;
+    private TransactionService transactionService;
 
     @GET()
     @Path("")

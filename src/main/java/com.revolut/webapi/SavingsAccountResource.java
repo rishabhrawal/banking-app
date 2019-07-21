@@ -18,10 +18,10 @@ import java.util.concurrent.ExecutionException;
 @Path("api/v1/accounts/savings")
 public class SavingsAccountResource {
 
-    Logger logger = LoggerFactory.getLogger(SavingsAccountResource.class);
+    private static final Logger logger = LoggerFactory.getLogger(SavingsAccountResource.class);
 
     @Inject
-    AccountService accountService;
+    private AccountService accountService;
 
 
     @POST()

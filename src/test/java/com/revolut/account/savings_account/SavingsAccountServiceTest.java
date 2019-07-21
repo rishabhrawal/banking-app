@@ -21,6 +21,7 @@ import org.slf4j.LoggerFactory;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 import javax.transaction.TransactionManager;
+import java.math.BigDecimal;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
@@ -68,7 +69,7 @@ public class SavingsAccountServiceTest {
         savingsAccount1.setName("acc1");
         savingsAccount1.setActive(true);
         savingsAccount1.setClosed(false);
-        savingsAccount1.credit(50.00);
+        savingsAccount1.credit(new BigDecimal(50.00));
         when(entityManager.find(SavingsAccount.class, 1L)).thenReturn(savingsAccount1);
         savingsAccount2 = new SavingsAccount();
         savingsAccount1.setId(2L);
@@ -101,22 +102,22 @@ public class SavingsAccountServiceTest {
 
     @Test
     public void getBalance() throws RevolutException, ExecutionException {
-        double balance = savingsAccountService.getBalance(1L);
-        assertEquals(50.0, balance, 0.0);
+        BigDecimal balance = savingsAccountService.getBalance(1L);
+        assertEquals(50.0, balance.doubleValue(), 0.0);
     }
 
     @Test
     public void getBalanceInactiveAccount() throws RevolutException, ExecutionException {
         savingsAccount1.setActive(false);
-        double balance = savingsAccountService.getBalance(1L);
-        assertEquals(50.0, balance, 0.0);
+        BigDecimal balance = savingsAccountService.getBalance(1L);
+        assertEquals(50.0, balance.doubleValue(), 0.0);
     }
 
     @Test
     public void getBalanceClosedAccount() throws RevolutException, ExecutionException {
         savingsAccount1.setClosed(true);
-        double balance = savingsAccountService.getBalance(1L);
-        assertEquals(50.0, balance, 0.0);
+        BigDecimal balance = savingsAccountService.getBalance(1L);
+        assertEquals(50.0, balance.doubleValue(), 0.0);
     }
 
 
@@ -125,7 +126,7 @@ public class SavingsAccountServiceTest {
         savingsAccount1.setActive(false);
         TransactionModel transactionModel = new TransactionModel();
         transactionModel.setDebitAccountId(1L);
-        transactionModel.setAmount(20.00);
+        transactionModel.setAmount(new BigDecimal(20.00));
         savingsAccountService.debit(transactionModel);
     }
 
@@ -134,7 +135,7 @@ public class SavingsAccountServiceTest {
         savingsAccount1.setClosed(true);
         TransactionModel transactionModel = new TransactionModel();
         transactionModel.setDebitAccountId(1L);
-        transactionModel.setAmount(20.00);
+        transactionModel.setAmount(new BigDecimal(20.00));
         savingsAccountService.debit(transactionModel);
     }
 
@@ -142,7 +143,7 @@ public class SavingsAccountServiceTest {
     public void debitInsufficientBalanceException() throws RevolutException, ExecutionException {
         TransactionModel transactionModel = new TransactionModel();
         transactionModel.setDebitAccountId(1L);
-        transactionModel.setAmount(51.00);
+        transactionModel.setAmount(new BigDecimal(51.00));
         savingsAccountService.debit(transactionModel);
     }
 
@@ -150,9 +151,9 @@ public class SavingsAccountServiceTest {
     public void debit() throws RevolutException, ExecutionException {
         TransactionModel transactionModel = new TransactionModel();
         transactionModel.setDebitAccountId(1L);
-        transactionModel.setAmount(50.00);
+        transactionModel.setAmount(new BigDecimal(50.00));
         savingsAccountService.debit(transactionModel);
-        assertEquals(00.00, savingsAccount1.getBalance(), 00);
+        assertEquals(00.00, savingsAccount1.getBalance().doubleValue(), 00);
     }
 
     @Test(expected = IllegalAccountStateException.class)
@@ -160,17 +161,17 @@ public class SavingsAccountServiceTest {
         savingsAccount1.setActive(false);
         TransactionModel transactionModel = new TransactionModel();
         transactionModel.setCreditAccountId(1L);
-        transactionModel.setAmount(20.00);
+        transactionModel.setAmount(new BigDecimal(20.00));
         savingsAccountService.credit(transactionModel);
     }
 
     @Test(expected = IllegalAccountStateException.class)
     public void creditClosedAccountException() throws RevolutException, ExecutionException {
         savingsAccount1.setClosed(true);
-        savingsAccount1.credit(0);
+        savingsAccount1.credit(new BigDecimal(0));
         TransactionModel transactionModel = new TransactionModel();
         transactionModel.setCreditAccountId(1L);
-        transactionModel.setAmount(20.00);
+        transactionModel.setAmount(new BigDecimal(20.00));
         savingsAccountService.credit(transactionModel);
     }
 
@@ -178,9 +179,9 @@ public class SavingsAccountServiceTest {
     public void credit() throws RevolutException, ExecutionException {
         TransactionModel transactionModel = new TransactionModel();
         transactionModel.setCreditAccountId(1L);
-        transactionModel.setAmount(20.00);
+        transactionModel.setAmount(new BigDecimal(20.00));
         savingsAccountService.credit(transactionModel);
-        assertEquals(70.00, savingsAccount1.getBalance(), 0.0);
+        assertEquals(70.00, savingsAccount1.getBalance().doubleValue(), 0.0);
     }
 
 
@@ -189,19 +190,19 @@ public class SavingsAccountServiceTest {
         TransactionModel transactionModel = new TransactionModel();
         transactionModel.setDebitAccountId(1L);
         transactionModel.setCreditAccountId(2L);
-        transactionModel.setAmount(51.00);
+        transactionModel.setAmount(new BigDecimal(51.00));
         savingsAccountService.transfer(transactionModel);
     }
 
     @Test
     public void transfer() throws RevolutException, ExecutionException {
-        savingsAccount2.credit(11.0);
+        savingsAccount2.credit(new BigDecimal(11.0));
         TransactionModel transactionModel = new TransactionModel();
         transactionModel.setDebitAccountId(1L);
         transactionModel.setCreditAccountId(2L);
-        transactionModel.setAmount(50.00);
+        transactionModel.setAmount(new BigDecimal(50.00));
         savingsAccountService.transfer(transactionModel);
-        assertEquals(0.0, savingsAccount1.getBalance(), 0.0);
-        assertEquals(61.0, savingsAccount2.getBalance(), 0.0);
+        assertEquals(0.0, savingsAccount1.getBalance().doubleValue(), 0.0);
+        assertEquals(61.0, savingsAccount2.getBalance().doubleValue(), 0.0);
     }
 }

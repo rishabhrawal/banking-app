@@ -1,4 +1,4 @@
-package com.revolut.webapi.ex_mapper;
+package com.revolut.webapi.exception_mapper;
 
 import com.revolut.exception.RevolutException;
 import org.slf4j.Logger;
@@ -11,7 +11,7 @@ import javax.ws.rs.ext.Provider;
 @Provider
 public class ExceptionMapperRevolut implements ExceptionMapper<RevolutException> {
 
-    Logger logger = LoggerFactory.getLogger(ExceptionMapperRevolut.class);
+    private static final Logger logger = LoggerFactory.getLogger(ExceptionMapperRevolut.class);
 
     @Override
     public Response toResponse(RevolutException ex) {

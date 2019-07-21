@@ -1,4 +1,4 @@
-package com.revolut.webapi.ex_mapper;
+package com.revolut.webapi.exception_mapper;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,7 +12,7 @@ import javax.ws.rs.ext.Provider;
 @Provider
 public class ExceptionMapperNotFound implements ExceptionMapper<NotFoundException> {
 
-    Logger logger = LoggerFactory.getLogger(ExceptionMapperNotFound.class);
+    private static final Logger logger = LoggerFactory.getLogger(ExceptionMapperNotFound.class);
 
     @Override
     public Response toResponse(NotFoundException ex) {

@@ -2,7 +2,6 @@ package com.revolut;
 
 
 import com.revolut.config.MyApplication;
-import com.revolut.webapi.SavingsAccountResource;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
@@ -34,6 +33,9 @@ public class App {
 
         /*jerseyServlet.setInitParameter("javax.ws.rs.Application",
                 AppInjector.class.getCanonicalName());*/
+
+        jerseyServlet.setInitParameter("io.swagger.jaxrs.listing",
+                "com.revolut.webapi");
 
 
         try {

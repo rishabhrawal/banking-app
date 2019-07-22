@@ -41,7 +41,8 @@ public class SavingsAccountResource {
 
     @DELETE
     @Produces(MediaType.APPLICATION_JSON)
-    public Boolean closeAccount(@QueryParam("accountId") Long accountId) throws ExecutionException {
+    @Path("/{accountId}")
+    public AccountModel closeAccount(@PathParam("accountId") Long accountId) throws ExecutionException {
         return accountService.close(accountId);
     }
 
@@ -52,34 +53,6 @@ public class SavingsAccountResource {
         logger.info("Account Id: " + accountId);
         return accountService.getAccountDetails(accountId);
 
-    }
-
-
-    @POST
-    @Path("/credit")
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    public TransactionModel creditAccount( TransactionModel transactionModel) throws RevolutException, ExecutionException {
-        logger.info("Credit, TransactionModel: " + transactionModel);
-        return accountService.credit(transactionModel);
-    }
-
-    @POST
-    @Path("/debit")
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    public TransactionModel debitAccount(TransactionModel transactionModel) throws RevolutException, ExecutionException {
-        logger.info("Debit, TransactionModel: " + transactionModel);
-        return accountService.debit(transactionModel);
-    }
-
-    @POST
-    @Path("/transfer")
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    public TransactionModel transfer(TransactionModel transactionModel) throws RevolutException, ExecutionException {
-        logger.info("Transfer, TransactionModel: " + transactionModel);
-        return accountService.transfer(transactionModel);
     }
 
 

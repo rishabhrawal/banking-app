@@ -10,6 +10,8 @@
 		"c6cc8620-1e06-49e7-a2fe-256507efce6a",
 		"00edd805-ff7d-42ce-a452-a21087129913",
 		"062d075e-fa59-42b1-815a-0f912d030dc6",
+		"c7a753f4-1aa2-4226-bdec-c59f43b596c0",
+		"46e6989d-2983-414f-a298-43ca86987d22",
 		"bda27ecb-d5a2-4ca2-8e18-b28267e18937",
 		"fd44a2aa-3a93-4381-be9f-05c652806c2f"
 	],
@@ -19,7 +21,7 @@
 		{
 			"id": "00edd805-ff7d-42ce-a452-a21087129913",
 			"name": "Debit Account",
-			"url": "localhost:8080/api/v1/accounts/savings/debit",
+			"url": "localhost:8080/api/v1/accounts/savings/transactions/debit",
 			"description": "",
 			"data": [],
 			"dataMode": "raw",
@@ -74,7 +76,7 @@
 		{
 			"id": "062d075e-fa59-42b1-815a-0f912d030dc6",
 			"name": "Transfer",
-			"url": "localhost:8080/api/v1/accounts/savings/transfer",
+			"url": "localhost:8080/api/v1/accounts/savings/transactions/transfer",
 			"description": "",
 			"data": [],
 			"dataMode": "raw",
@@ -122,7 +124,62 @@
 			},
 			"events": null,
 			"folder": null,
-			"rawModeData": "{\n        \"debitAccountId\": \"1\",\n        \"creditAccountId\": 3,\n        \"amount\": 5\n}",
+			"rawModeData": "{\n        \"debitAccountId\": \"1\",\n        \"creditAccountId\": 6,\n        \"amount\": 5\n}",
+			"headers": "Content-Type: application/json\nAuthorization: Basic cGF5Zmx1eDpzZWNyZXQ=\n",
+			"pathVariables": {}
+		},
+		{
+			"id": "46e6989d-2983-414f-a298-43ca86987d22",
+			"name": "Close Account",
+			"url": "localhost:8080/api/v1/accounts/savings/1/",
+			"description": "",
+			"data": [],
+			"dataMode": "raw",
+			"headerData": [
+				{
+					"key": "Content-Type",
+					"value": "application/json",
+					"description": "",
+					"enabled": true
+				},
+				{
+					"key": "Authorization",
+					"value": "Basic cGF5Zmx1eDpzZWNyZXQ=",
+					"description": "",
+					"enabled": true
+				}
+			],
+			"method": "DELETE",
+			"pathVariableData": [],
+			"queryParams": [],
+			"auth": {
+				"type": "basic",
+				"basic": [
+					{
+						"key": "username",
+						"value": "{{client}}",
+						"type": "string"
+					},
+					{
+						"key": "password",
+						"value": "{{secret}}",
+						"type": "string"
+					},
+					{
+						"key": "saveHelperData",
+						"value": true,
+						"type": "boolean"
+					},
+					{
+						"key": "showPassword",
+						"value": false,
+						"type": "boolean"
+					}
+				]
+			},
+			"events": null,
+			"folder": null,
+			"rawModeData": "{\n        \"firstName\": \"Saurabh\",\n        \"lastName\": \"Rawal\",\n        \"userName\": \"srawal17\",\n        \"role\": \"admin\",\n        \"enabled\": false,\n        \"email\": \"srk1@gmail.com\",\n        \"msisdn\": null,\n        \"password\": \"password\"\n}",
 			"headers": "Content-Type: application/json\nAuthorization: Basic cGF5Zmx1eDpzZWNyZXQ=\n",
 			"pathVariables": {}
 		},
@@ -239,7 +296,7 @@
 		{
 			"id": "c6cc8620-1e06-49e7-a2fe-256507efce6a",
 			"name": "Credit Account",
-			"url": "localhost:8080/api/v1/accounts/savings/credit",
+			"url": "localhost:8080/api/v1/accounts/savings/transactions/credit",
 			"description": "",
 			"data": [],
 			"dataMode": "raw",
@@ -288,6 +345,61 @@
 			"events": null,
 			"folder": null,
 			"rawModeData": "{\n        \"transactionType\": \"CREDIT\",\n        \"creditAccountId\": \"1\",\n        \"amount\": 100\n}",
+			"headers": "Content-Type: application/json\nAuthorization: Basic cGF5Zmx1eDpzZWNyZXQ=\n",
+			"pathVariables": {}
+		},
+		{
+			"id": "c7a753f4-1aa2-4226-bdec-c59f43b596c0",
+			"name": "Get Account",
+			"url": "localhost:8080/api/v1/accounts/savings/1",
+			"description": "",
+			"data": [],
+			"dataMode": "raw",
+			"headerData": [
+				{
+					"key": "Content-Type",
+					"value": "application/json",
+					"description": "",
+					"enabled": true
+				},
+				{
+					"key": "Authorization",
+					"value": "Basic cGF5Zmx1eDpzZWNyZXQ=",
+					"description": "",
+					"enabled": true
+				}
+			],
+			"method": "GET",
+			"pathVariableData": [],
+			"queryParams": [],
+			"auth": {
+				"type": "basic",
+				"basic": [
+					{
+						"key": "username",
+						"value": "{{client}}",
+						"type": "string"
+					},
+					{
+						"key": "password",
+						"value": "{{secret}}",
+						"type": "string"
+					},
+					{
+						"key": "saveHelperData",
+						"value": true,
+						"type": "boolean"
+					},
+					{
+						"key": "showPassword",
+						"value": false,
+						"type": "boolean"
+					}
+				]
+			},
+			"events": null,
+			"folder": null,
+			"rawModeData": "{\n        \"firstName\": \"Saurabh\",\n        \"lastName\": \"Rawal\",\n        \"userName\": \"srawal17\",\n        \"role\": \"admin\",\n        \"enabled\": false,\n        \"email\": \"srk1@gmail.com\",\n        \"msisdn\": null,\n        \"password\": \"password\"\n}",
 			"headers": "Content-Type: application/json\nAuthorization: Basic cGF5Zmx1eDpzZWNyZXQ=\n",
 			"pathVariables": {}
 		},

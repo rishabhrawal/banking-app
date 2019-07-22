@@ -5,6 +5,7 @@ import com.revolut.common.JpaFactory;
 
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
 import javax.persistence.TypedQuery;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -18,14 +19,14 @@ public class SavingsTransactionService implements TransactionService {
     public List<TransactionModel> getAllTransactions() {
         EntityManager em = jpaFactory.getEntityManager();
         TypedQuery<Transaction> query = em.createQuery("SELECT t FROM Transaction t", Transaction.class);
-        return  query.getResultList().stream().map(t->mapTransactionToModel(t)).collect(Collectors.toList());
+        return query.getResultList().stream().map(t -> mapTransactionToModel(t)).collect(Collectors.toList());
     }
 
     @Override
     public List<TransactionModel> getAllTransactionsForAccount(long accountId) {
         EntityManager em = jpaFactory.getEntityManager();
         TypedQuery<Transaction> query = em.createQuery("SELECT t FROM Transaction t", Transaction.class);
-        return  query.getResultList().stream().map(t->mapTransactionToModel(t)).collect(Collectors.toList());
+        return query.getResultList().stream().map(t -> mapTransactionToModel(t)).collect(Collectors.toList());
     }
 
     @Override
@@ -35,9 +36,27 @@ public class SavingsTransactionService implements TransactionService {
         return mapTransactionToModel(transaction);
     }
 
-    public TransactionModel mapTransactionToModel(Transaction transaction){
+    @Override
+    public Transaction saveTransaction(Transaction transaction) {
+        EntityManager em = jpaFactory.getEntityManager();
+        EntityTransaction tx = em.getTransaction();
+        try {
+            tx.begin();
+            em.persist(transaction);
+            tx.commit();
+        } catch (Exception e) {
+            if (tx != null && tx.isActive()) tx.rollback();
+            throw e;
+        } finally {
+            em.close();
+        }
+
+        return transaction;
+    }
+
+    public TransactionModel mapTransactionToModel(Transaction transaction) {
         TransactionModel transactionModel = new TransactionModel();
-        if(transaction==null){
+        if (transaction == null) {
             return transactionModel;
         }
         transactionModel.setId(transaction.getId());

@@ -22,7 +22,7 @@ public interface AccountService {
 
     TransactionModel transfer(TransactionModel transactionModel) throws RevolutException, ExecutionException;
 
-    Boolean close(long accountId) throws ExecutionException;
+    AccountModel close(long accountId) throws ExecutionException;
 
     static void validateAmount(BigDecimal amount) throws RevolutException {
         if(amount==null){

@@ -1,6 +1,7 @@
 package com.revolut.account.savings_account;
 
 
+import com.revolut.account.transaction.Transaction;
 import com.revolut.account.transaction.TransactionModel;
 import com.revolut.account.transaction.TransactionService;
 import com.revolut.lock.SavingsLockCache;
@@ -74,6 +75,9 @@ public class SavingsAccountServiceTest {
         savingsAccount2.setActive(true);
         savingsAccount2.setClosed(false);
         when(entityManager.find(SavingsAccount.class, 2L)).thenReturn(savingsAccount2);
+
+        Transaction transaction = new Transaction();
+        when(transactionService.saveTransaction(any())).thenReturn(transaction);
     }
 
     @After

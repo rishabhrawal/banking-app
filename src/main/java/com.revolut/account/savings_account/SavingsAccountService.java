@@ -19,7 +19,6 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.locks.Lock;
 import java.util.stream.Collectors;
@@ -51,8 +50,8 @@ public class SavingsAccountService implements AccountService {
         savingsAccount.setName(accountModel.getName());
         savingsAccount.setClosed(false);
         savingsAccount.setActive(true);
-        savingsAccount = savingsAccountDao.saveSavingsAccount(savingsAccount);
-/*        EntityManager em = jpaFactory.getEntityManager();
+        savingsAccount.setOpeningDate(LocalDateTime.now());
+        EntityManager em = jpaFactory.getEntityManager();
         EntityTransaction tx = em.getTransaction();
         try {
             tx.begin();
@@ -63,7 +62,7 @@ public class SavingsAccountService implements AccountService {
             throw e;
         } finally {
             em.close();
-        }*/
+        }
 
         TransactionModel transactionModel = new TransactionModel();
         transactionModel.setCreditAccountId(savingsAccount.getId());
@@ -96,8 +95,18 @@ public class SavingsAccountService implements AccountService {
         SavingsAccount savingsAccount = null;
         try {
             lock.lock();
-            Optional<SavingsAccount> value = savingsAccountDao.getAccount(accountId);
+           /* Optional<SavingsAccount> value = savingsAccountDao.getAccount(accountId);
             if (!value.isPresent()) {
+                throw new RevolutException(1, "Invalid account id", null);
+            }*/
+            EntityManager em = jpaFactory.getEntityManager();
+
+            try {
+                savingsAccount = em.find(SavingsAccount.class, accountId);
+            } finally {
+                em.close();
+            }
+            if (savingsAccount==null) {
                 throw new RevolutException(1, "Invalid account id", null);
             }
 
@@ -123,28 +132,25 @@ public class SavingsAccountService implements AccountService {
         AccountService.validateAmount(amount);
         Lock lock = lockCache.getLockForAccount(accountId).writeLock();
         SavingsAccount savingsAccount = null;
-
         Transaction transaction = new Transaction(TransactionType.DEBIT);
         transaction.setAmount(amount);
         transaction.setDebitAccountId(accountId);
         transaction.setDateTime(LocalDateTime.now());
         transaction.setStatus(false);
+        transaction = transactionService.saveTransaction(transaction);
         try {
             lock.lock();
             EntityManager em = jpaFactory.getEntityManager();
             EntityTransaction tx = em.getTransaction();
             try {
                 tx.begin();
-                em.persist(transaction);
-                //em.detach(transaction);
                 savingsAccount = em.find(SavingsAccount.class, accountId);
                 if (savingsAccount == null) {
                     throw new RevolutException(1, "Account not found", null);
                 }
                 savingsAccount.debit(amount);
-                em.persist(savingsAccount);
                 transaction.setStatus(true);
-                em.persist(transaction);
+                em.merge(transaction);
                 tx.commit();
             } catch (Exception e) {
                 if (tx != null && tx.isActive()) tx.rollback();
@@ -173,7 +179,7 @@ public class SavingsAccountService implements AccountService {
         transaction.setCreditAccountId(accountId);
         transaction.setDateTime(LocalDateTime.now());
         transaction.setStatus(false);
-
+        transaction = transactionService.saveTransaction(transaction);
         Lock lock = lockCache.getLockForAccount(accountId).writeLock();
         try {
             lock.lock();
@@ -188,9 +194,8 @@ public class SavingsAccountService implements AccountService {
                 }
 
                 savingsAccount.credit(amount);
-                em.persist(savingsAccount);
                 transaction.setStatus(true);
-                em.persist(transaction);
+                em.merge(transaction);
                 tx.commit();
             } catch (Exception e) {
                 if (tx != null && tx.isActive()) tx.rollback();
@@ -220,8 +225,8 @@ public class SavingsAccountService implements AccountService {
         transaction.setCreditAccountId(creditAccountId);
         transaction.setDateTime(LocalDateTime.now());
         transaction.setStatus(false);
+        transaction = transactionService.saveTransaction(transaction);
 
-        AccountService.validateAmount(amount);
         Lock lock1 = lockCache.getLockForAccount(debitAccountId).writeLock();
         Lock lock2 = lockCache.getLockForAccount(creditAccountId).writeLock();
         try {
@@ -253,10 +258,8 @@ public class SavingsAccountService implements AccountService {
 
                 debitAccount.debit(amount);
                 creditAccount.credit(amount);
-                em.persist(debitAccount);
-                em.persist(creditAccount);
                 transaction.setStatus(true);
-                em.persist(transaction);
+                em.merge(transaction);
                 tx.commit();
             } catch (Exception e) {
                 if (tx != null && tx.isActive()) tx.rollback();
@@ -277,7 +280,7 @@ public class SavingsAccountService implements AccountService {
      * @return
      */
     @Override
-    public Boolean close(long accountId) throws ExecutionException {
+    public AccountModel close(long accountId) throws ExecutionException {
         Lock lock = lockCache.getLockForAccount(accountId).writeLock();
         SavingsAccount savingsAccount = null;
         try {
@@ -300,7 +303,7 @@ public class SavingsAccountService implements AccountService {
         } finally {
             lock.unlock();
         }
-        return true;
+        return mapAccountToModel(savingsAccount);
     }
 
     private AccountModel mapAccountToModel(SavingsAccount account) {

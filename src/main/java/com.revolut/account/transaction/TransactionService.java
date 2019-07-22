@@ -27,6 +27,8 @@ public interface TransactionService {
      */
     TransactionModel getTransaction(long transactionId);
 
+    Transaction saveTransaction(Transaction transaction);
+
     /**
      *
      * @param transaction Databse Entity

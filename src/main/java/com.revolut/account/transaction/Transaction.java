@@ -1,6 +1,5 @@
 package com.revolut.account.transaction;
 
-import lombok.Builder;
 import lombok.Data;
 
 import javax.persistence.Entity;

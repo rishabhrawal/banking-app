@@ -84,44 +84,6 @@ public class SavingsAccountServiceTest {
     public void tearDown() throws Exception {
     }
 
-    @Ignore
-    @Test(expected = RevolutException.class)
-    public void createAccountWithInvalidData() {
-    }
-
-    @Test
-    public void createSuccess() {
-    }
-
-    @Test
-    public void getAccountDetails() {
-    }
-
-    /*@Test(expected = IllegalAccountStateException.class)
-    public void closeAlreadyClosedAccount() {
-    }*/
-
-    /*@Test
-    public void getBalance() throws RevolutException, ExecutionException {
-        BigDecimal balance = savingsAccountService.getBalance(1L);
-        assertEquals(50.0, balance.doubleValue(), 0.0);
-    }
-
-    @Test
-    public void getBalanceInactiveAccount() throws RevolutException, ExecutionException {
-        savingsAccount1.setActive(false);
-        BigDecimal balance = savingsAccountService.getBalance(1L);
-        assertEquals(50.0, balance.doubleValue(), 0.0);
-    }
-
-    @Test
-    public void getBalanceClosedAccount() throws RevolutException, ExecutionException {
-        savingsAccount1.setClosed(true);
-        BigDecimal balance = savingsAccountService.getBalance(1L);
-        assertEquals(50.0, balance.doubleValue(), 0.0);
-    }*/
-
-
     @Test(expected = IllegalAccountStateException.class)
     public void debitInactiveAccountException() throws RevolutException, ExecutionException {
         savingsAccount1.setActive(false);

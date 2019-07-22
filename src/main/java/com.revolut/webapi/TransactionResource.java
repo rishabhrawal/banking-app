@@ -29,15 +29,23 @@ public class TransactionResource {
     @Path("")
     @Produces(MediaType.APPLICATION_JSON)
     public List<TransactionModel> getAllTransactions() {
+        logger.debug("getAllTransactions");
         return transactionService.getAllTransactions();
-
     }
 
+    @GET()
+    @Path("/query")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<TransactionModel> getTransactionsForAccount(@QueryParam("accountId") Long accountId) {
+        logger.debug("getTransactionsForAccount: "+accountId);
+        return transactionService.getAllTransactionsForAccount(accountId);
+    }
 
     @GET()
     @Path("/{transactionId}")
     @Produces(MediaType.APPLICATION_JSON)
     public  TransactionModel getTransaction(@PathParam("transactionId") Long transactionId) {
+        logger.debug("getTransaction: "+transactionId);
         return transactionService.getTransaction(transactionId);
 
     }
@@ -47,7 +55,7 @@ public class TransactionResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public TransactionModel creditAccount( TransactionModel transactionModel) throws RevolutException, ExecutionException {
-        logger.info("Credit, TransactionModel: " + transactionModel);
+        logger.debug("Credit, TransactionModel: " + transactionModel);
         return accountService.credit(transactionModel);
     }
 
@@ -56,7 +64,7 @@ public class TransactionResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public TransactionModel debitAccount(TransactionModel transactionModel) throws RevolutException, ExecutionException {
-        logger.info("Debit, TransactionModel: " + transactionModel);
+        logger.debug("Debit, TransactionModel: " + transactionModel);
         return accountService.debit(transactionModel);
     }
 
@@ -65,7 +73,7 @@ public class TransactionResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public TransactionModel transfer(TransactionModel transactionModel) throws RevolutException, ExecutionException {
-        logger.info("Transfer, TransactionModel: " + transactionModel);
+        logger.debug("Transfer, TransactionModel: " + transactionModel);
         return accountService.transfer(transactionModel);
     }
 

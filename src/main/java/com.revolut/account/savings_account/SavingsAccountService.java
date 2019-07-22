@@ -23,6 +23,8 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.locks.Lock;
 import java.util.stream.Collectors;
 
+import static com.revolut.common.Constants.*;
+
 
 public class SavingsAccountService implements AccountService {
 
@@ -107,7 +109,7 @@ public class SavingsAccountService implements AccountService {
                 em.close();
             }
             if (savingsAccount==null) {
-                throw new RevolutException(1, "Invalid account id", null);
+                throw new RevolutException(INVALID_ACCOUNT_ID_CODE, INVALID_ACCOUNT_ID_TEXT, null);
             }
 
         } finally {
@@ -146,7 +148,7 @@ public class SavingsAccountService implements AccountService {
                 tx.begin();
                 savingsAccount = em.find(SavingsAccount.class, accountId);
                 if (savingsAccount == null) {
-                    throw new RevolutException(1, "Account not found", null);
+                    throw new RevolutException(ACCOUNT_NOT_FOUND_CODE, ACCOUNT_NOT_FOUND_TEXT, null);
                 }
                 savingsAccount.debit(amount);
                 transaction.setStatus(true);
@@ -190,7 +192,7 @@ public class SavingsAccountService implements AccountService {
                 tx.begin();
                 savingsAccount = em.find(SavingsAccount.class, accountId);
                 if (savingsAccount == null) {
-                    throw new RevolutException(1, "Account not found", null);
+                    throw new RevolutException(ACCOUNT_NOT_FOUND_CODE, ACCOUNT_NOT_FOUND_TEXT, null);
                 }
 
                 savingsAccount.credit(amount);
@@ -244,16 +246,16 @@ public class SavingsAccountService implements AccountService {
                 tx.begin();
                 SavingsAccount debitAccount = em.find(SavingsAccount.class, debitAccountId);
                 if (debitAccount == null) {
-                    throw new RevolutException(1, "Account(" + debitAccountId + ") not found", null);
+                    throw new RevolutException(ACCOUNT_NOT_FOUND_CODE, ACCOUNT_NOT_FOUND_TEXT + ":"+debitAccountId , null);
                 }
                 SavingsAccount creditAccount = em.find(SavingsAccount.class, creditAccountId);
                 if (creditAccount == null) {
-                    throw new RevolutException(1, "Account(" + creditAccountId + ") not found", null);
+                    throw new RevolutException(ACCOUNT_NOT_FOUND_CODE, ACCOUNT_NOT_FOUND_TEXT+":"+ creditAccountId, null);
                 }
 
                 // check debit account has enough balance
                 if (debitAccount.getBalance().compareTo(amount) < 0) {
-                    throw new InsufficientBalanceException(1, "Insufficient Balance in  the account", null);
+                    throw new InsufficientBalanceException(INVALID_BALANCE_CODE, INVALID_BALANCE_TEXT, null);
                 }
 
                 debitAccount.debit(amount);

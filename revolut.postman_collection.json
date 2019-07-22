@@ -13,7 +13,8 @@
 		"c7a753f4-1aa2-4226-bdec-c59f43b596c0",
 		"46e6989d-2983-414f-a298-43ca86987d22",
 		"bda27ecb-d5a2-4ca2-8e18-b28267e18937",
-		"fd44a2aa-3a93-4381-be9f-05c652806c2f"
+		"fd44a2aa-3a93-4381-be9f-05c652806c2f",
+		"145efbab-663b-49d9-934f-df7c31da2135"
 	],
 	"folders_order": [],
 	"folders": [],
@@ -126,6 +127,69 @@
 			"folder": null,
 			"rawModeData": "{\n        \"debitAccountId\": \"1\",\n        \"creditAccountId\": 6,\n        \"amount\": 5\n}",
 			"headers": "Content-Type: application/json\nAuthorization: Basic cGF5Zmx1eDpzZWNyZXQ=\n",
+			"pathVariables": {}
+		},
+		{
+			"id": "145efbab-663b-49d9-934f-df7c31da2135",
+			"name": "Get transactions for account",
+			"url": "localhost:8080/api/v1/accounts/savings/transactions/query?accountId=1",
+			"description": "",
+			"data": [],
+			"dataMode": "raw",
+			"headerData": [
+				{
+					"key": "Content-Type",
+					"value": "application/json",
+					"description": "",
+					"enabled": false
+				},
+				{
+					"key": "Authorization",
+					"value": "Basic cGF5Zmx1eDpzZWNyZXQ=",
+					"description": "",
+					"enabled": false
+				}
+			],
+			"method": "GET",
+			"pathVariableData": [],
+			"queryParams": [
+				{
+					"key": "accountId",
+					"value": "1",
+					"equals": true,
+					"description": "",
+					"enabled": true
+				}
+			],
+			"auth": {
+				"type": "basic",
+				"basic": [
+					{
+						"key": "username",
+						"value": "{{client}}",
+						"type": "string"
+					},
+					{
+						"key": "password",
+						"value": "{{secret}}",
+						"type": "string"
+					},
+					{
+						"key": "saveHelperData",
+						"value": true,
+						"type": "boolean"
+					},
+					{
+						"key": "showPassword",
+						"value": false,
+						"type": "boolean"
+					}
+				]
+			},
+			"events": null,
+			"folder": null,
+			"rawModeData": "{\n        \"firstName\": \"Saurabh\",\n        \"lastName\": \"Rawal\",\n        \"userName\": \"srawal17\",\n        \"role\": \"admin\",\n        \"enabled\": false,\n        \"email\": \"srk1@gmail.com\",\n        \"msisdn\": null,\n        \"password\": \"password\"\n}",
+			"headers": "//Content-Type: application/json\n//Authorization: Basic cGF5Zmx1eDpzZWNyZXQ=\n",
 			"pathVariables": {}
 		},
 		{

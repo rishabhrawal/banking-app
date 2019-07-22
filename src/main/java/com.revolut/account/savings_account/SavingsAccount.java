@@ -10,6 +10,8 @@ import com.revolut.exception.RevolutException;
 import javax.persistence.Entity;
 import java.math.BigDecimal;
 
+import static com.revolut.common.Constants.*;
+
 
 @Entity
 public class SavingsAccount extends Account {
@@ -20,10 +22,10 @@ public class SavingsAccount extends Account {
         checkAccountValidity();
         BigDecimal balance = getBalance();
         if(balance==null){
-            throw new InsufficientBalanceException(1, "Invalid Balance", null);
+            throw new InsufficientBalanceException(INVALID_BALANCE_CODE, INVALID_BALANCE_TEXT, null);
         }
         if (balance.compareTo(amount) < 0) {
-            throw new InsufficientBalanceException(1, "Insufficient Balance", null);
+            throw new InsufficientBalanceException(INSUFFICIENT_BALANCE_CODE, INSUFFICIENT_BALANCE_TEXT, null);
         }
         balance = balance.subtract(amount);
         setBalance(balance);
@@ -44,10 +46,10 @@ public class SavingsAccount extends Account {
 
     private boolean checkAccountValidity() throws RevolutException {
         if (getClosed()) {
-            throw new IllegalAccountStateException(1, "Account is closed", null);
+            throw new IllegalAccountStateException(ACCOUNT_IS_CLOSED_CODE, ACCOUNT_IS_CLOSED_TEXT, null);
         }
         if (!getActive()) {
-            throw new IllegalAccountStateException(1, "Account is Inactive", null);
+            throw new IllegalAccountStateException(ACCOUNT_IS_INACTIVE_CODE, ACCOUNT_IS_INACTIVE_TEXT, null);
         }
         return true;
     }

@@ -7,14 +7,14 @@
 	"variables": [],
 	"order": [
 		"69570892-4e4b-49d0-b516-ce85325f5259",
-		"c6cc8620-1e06-49e7-a2fe-256507efce6a",
-		"00edd805-ff7d-42ce-a452-a21087129913",
-		"062d075e-fa59-42b1-815a-0f912d030dc6",
 		"c7a753f4-1aa2-4226-bdec-c59f43b596c0",
 		"46e6989d-2983-414f-a298-43ca86987d22",
 		"bda27ecb-d5a2-4ca2-8e18-b28267e18937",
 		"fd44a2aa-3a93-4381-be9f-05c652806c2f",
-		"145efbab-663b-49d9-934f-df7c31da2135"
+		"145efbab-663b-49d9-934f-df7c31da2135",
+		"c6cc8620-1e06-49e7-a2fe-256507efce6a",
+		"00edd805-ff7d-42ce-a452-a21087129913",
+		"062d075e-fa59-42b1-815a-0f912d030dc6"
 	],
 	"folders_order": [],
 	"folders": [],
@@ -188,7 +188,7 @@
 			},
 			"events": null,
 			"folder": null,
-			"rawModeData": "{\n        \"firstName\": \"Saurabh\",\n        \"lastName\": \"Rawal\",\n        \"userName\": \"srawal17\",\n        \"role\": \"admin\",\n        \"enabled\": false,\n        \"email\": \"srk1@gmail.com\",\n        \"msisdn\": null,\n        \"password\": \"password\"\n}",
+			"rawModeData": "",
 			"headers": "//Content-Type: application/json\n//Authorization: Basic cGF5Zmx1eDpzZWNyZXQ=\n",
 			"pathVariables": {}
 		},
@@ -217,40 +217,18 @@
 			"pathVariableData": [],
 			"queryParams": [],
 			"auth": {
-				"type": "basic",
-				"basic": [
-					{
-						"key": "username",
-						"value": "{{client}}",
-						"type": "string"
-					},
-					{
-						"key": "password",
-						"value": "{{secret}}",
-						"type": "string"
-					},
-					{
-						"key": "saveHelperData",
-						"value": true,
-						"type": "boolean"
-					},
-					{
-						"key": "showPassword",
-						"value": false,
-						"type": "boolean"
-					}
-				]
+				"type": "noauth"
 			},
 			"events": null,
 			"folder": null,
-			"rawModeData": "{\n        \"firstName\": \"Saurabh\",\n        \"lastName\": \"Rawal\",\n        \"userName\": \"srawal17\",\n        \"role\": \"admin\",\n        \"enabled\": false,\n        \"email\": \"srk1@gmail.com\",\n        \"msisdn\": null,\n        \"password\": \"password\"\n}",
+			"rawModeData": "",
 			"headers": "Content-Type: application/json\nAuthorization: Basic cGF5Zmx1eDpzZWNyZXQ=\n",
 			"pathVariables": {}
 		},
 		{
 			"id": "69570892-4e4b-49d0-b516-ce85325f5259",
 			"name": "Create Account",
-			"url": "localhost:8080/api/v1/accounts/savings",
+			"url": "http://43.225.52.99/api/v1/accounts/savings",
 			"description": "",
 			"data": [],
 			"dataMode": "raw",
@@ -272,33 +250,11 @@
 			"pathVariableData": [],
 			"queryParams": [],
 			"auth": {
-				"type": "basic",
-				"basic": [
-					{
-						"key": "username",
-						"value": "{{client}}",
-						"type": "string"
-					},
-					{
-						"key": "password",
-						"value": "{{secret}}",
-						"type": "string"
-					},
-					{
-						"key": "saveHelperData",
-						"value": true,
-						"type": "boolean"
-					},
-					{
-						"key": "showPassword",
-						"value": false,
-						"type": "boolean"
-					}
-				]
+				"type": "noauth"
 			},
 			"events": null,
 			"folder": null,
-			"rawModeData": "{\n        \"name\": \"test-account\",\n        \"balance\": 100\n}",
+			"rawModeData": "{\n        \"name\": \"test-account-1\",\n        \"balance\": 100\n}",
 			"headers": "Content-Type: application/json\nAuthorization: Basic cGF5Zmx1eDpzZWNyZXQ=\n",
 			"pathVariables": {}
 		},
@@ -327,33 +283,11 @@
 			"pathVariableData": [],
 			"queryParams": [],
 			"auth": {
-				"type": "basic",
-				"basic": [
-					{
-						"key": "username",
-						"value": "{{client}}",
-						"type": "string"
-					},
-					{
-						"key": "password",
-						"value": "{{secret}}",
-						"type": "string"
-					},
-					{
-						"key": "saveHelperData",
-						"value": true,
-						"type": "boolean"
-					},
-					{
-						"key": "showPassword",
-						"value": false,
-						"type": "boolean"
-					}
-				]
+				"type": "noauth"
 			},
 			"events": null,
 			"folder": null,
-			"rawModeData": "{\n        \"firstName\": \"Saurabh\",\n        \"lastName\": \"Rawal\",\n        \"userName\": \"srawal17\",\n        \"role\": \"admin\",\n        \"enabled\": false,\n        \"email\": \"srk1@gmail.com\",\n        \"msisdn\": null,\n        \"password\": \"password\"\n}",
+			"rawModeData": "",
 			"headers": "Content-Type: application/json\nAuthorization: Basic cGF5Zmx1eDpzZWNyZXQ=\n",
 			"pathVariables": {}
 		},
@@ -437,40 +371,18 @@
 			"pathVariableData": [],
 			"queryParams": [],
 			"auth": {
-				"type": "basic",
-				"basic": [
-					{
-						"key": "username",
-						"value": "{{client}}",
-						"type": "string"
-					},
-					{
-						"key": "password",
-						"value": "{{secret}}",
-						"type": "string"
-					},
-					{
-						"key": "saveHelperData",
-						"value": true,
-						"type": "boolean"
-					},
-					{
-						"key": "showPassword",
-						"value": false,
-						"type": "boolean"
-					}
-				]
+				"type": "noauth"
 			},
 			"events": null,
 			"folder": null,
-			"rawModeData": "{\n        \"firstName\": \"Saurabh\",\n        \"lastName\": \"Rawal\",\n        \"userName\": \"srawal17\",\n        \"role\": \"admin\",\n        \"enabled\": false,\n        \"email\": \"srk1@gmail.com\",\n        \"msisdn\": null,\n        \"password\": \"password\"\n}",
+			"rawModeData": "",
 			"headers": "Content-Type: application/json\nAuthorization: Basic cGF5Zmx1eDpzZWNyZXQ=\n",
 			"pathVariables": {}
 		},
 		{
 			"id": "fd44a2aa-3a93-4381-be9f-05c652806c2f",
 			"name": "Get all transactions",
-			"url": "localhost:8080/api/v1/accounts/savings/transactions",
+			"url": "http://43.225.52.99/api/v1/accounts/savings/transactions",
 			"description": "",
 			"data": [],
 			"dataMode": "raw",
@@ -492,33 +404,11 @@
 			"pathVariableData": [],
 			"queryParams": [],
 			"auth": {
-				"type": "basic",
-				"basic": [
-					{
-						"key": "username",
-						"value": "{{client}}",
-						"type": "string"
-					},
-					{
-						"key": "password",
-						"value": "{{secret}}",
-						"type": "string"
-					},
-					{
-						"key": "saveHelperData",
-						"value": true,
-						"type": "boolean"
-					},
-					{
-						"key": "showPassword",
-						"value": false,
-						"type": "boolean"
-					}
-				]
+				"type": "noauth"
 			},
 			"events": null,
 			"folder": null,
-			"rawModeData": "{\n        \"firstName\": \"Saurabh\",\n        \"lastName\": \"Rawal\",\n        \"userName\": \"srawal17\",\n        \"role\": \"admin\",\n        \"enabled\": false,\n        \"email\": \"srk1@gmail.com\",\n        \"msisdn\": null,\n        \"password\": \"password\"\n}",
+			"rawModeData": "",
 			"headers": "//Content-Type: application/json\n//Authorization: Basic cGF5Zmx1eDpzZWNyZXQ=\n",
 			"pathVariables": {}
 		}

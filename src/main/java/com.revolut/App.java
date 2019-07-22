@@ -10,9 +10,10 @@ import java.util.Optional;
 
 public class App {
 
-    public static final Optional<String> port = Optional.ofNullable(System.getenv("PORT"));
+    public static final Optional<String> port = Optional.ofNullable(System.getenv("BANKING_APP_PORT"));
 
     public static void main(String[] args) throws Exception {
+
         ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
         context.setContextPath("/");
 

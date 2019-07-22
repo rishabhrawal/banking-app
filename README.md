@@ -1,4 +1,4 @@
-Banking  app to debit, credit accounts and do money transfers
+# Banking  app to debit, credit accounts and do money transfers
 1. Package structure is Domain driven rather than layered
 2. Application runs on Embedded Jetty server
 3. Jax-rs implementation is done in Jersey

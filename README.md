@@ -23,9 +23,9 @@ mvn clean install -> creates an uber jar(banking-app.jar), inside the target fol
 
 # Run
 
-java -jar banking-app.jar 
-starts the app at 8080 (can be changed using an environment variable BANKING_APP_PORT)
-Project has a postman collection(revolut.postman_collection.json) please import it for testing
+java -jar banking-app.jar   
+App is started on port 8080 (can be changed using an environment variable BANKING_APP_PORT)  
+Project has a postman collection(revolut.postman_collection.json) please import it for testing  
 You can also find the published collection -> https://documenter.getpostman.com/view/3426820/SVSPmRLf
 
 # Endpoints
@@ -41,15 +41,14 @@ Programmatic transaction management using JPA EntityManager
 
 # Concurrency
 
-It is assumed that database is accessed only through the application running on a single server
-Fine grained locking is done using ReadwriteLocks
+It is assumed that database is accessed only through the application running on a single server.  
+Fine grained locking is done using ReadwriteLocks.  
 In an attempt to improve parallelism locks are created for each account(guava cache is used to manage them).
 
 # Deployed app
 
-Sample app has been deployed on
-http://43.225.52.99
-it can be accessed through postman
+Sample app has been deployed at http://43.225.52.99  
+endpoints it can be accessed through postman
 
 
 

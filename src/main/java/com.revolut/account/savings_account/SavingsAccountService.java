@@ -291,7 +291,7 @@ public class SavingsAccountService implements AccountService {
                 savingsAccount.setClosed(true);
                 em.persist(savingsAccount);
                 tx.commit();
-            } catch (RuntimeException e) {
+            } catch (Exception e) {
                 if (tx != null && tx.isActive()) tx.rollback();
                 throw e;
             } finally {

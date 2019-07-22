@@ -17,8 +17,14 @@ public class SavingsAccountDao {
 
     List<SavingsAccount> getAllAccounts() {
         EntityManager em = jpaFactory.getEntityManager();
-        TypedQuery<SavingsAccount> query = em.createQuery("SELECT a FROM SavingsAccount a", SavingsAccount.class);
-        return query.getResultList();
+        List<SavingsAccount> savingsAccountList = null;
+        try {
+            TypedQuery<SavingsAccount> query = em.createQuery("SELECT a FROM SavingsAccount a", SavingsAccount.class);
+            savingsAccountList = query.getResultList();
+        } finally {
+            em.close();
+        }
+        return savingsAccountList;
     }
 
     public SavingsAccount saveSavingsAccount(SavingsAccount savingsAccount) {
@@ -38,7 +44,15 @@ public class SavingsAccountDao {
     }
 
     public Optional<SavingsAccount> getAccount(long accountId) {
+
         EntityManager em = jpaFactory.getEntityManager();
-        return Optional.ofNullable(em.find(SavingsAccount.class, accountId));
+
+        SavingsAccount savingsAccount = null;
+        try {
+            em.find(SavingsAccount.class, accountId);
+        } finally {
+            em.close();
+        }
+        return Optional.ofNullable(savingsAccount);
     }
 }

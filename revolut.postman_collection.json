@@ -1,0 +1,350 @@
+{
+	"id": "1ab231b4-348d-4720-bc7a-51a1d43e263a",
+	"name": "revolut",
+	"description": "",
+	"auth": null,
+	"events": null,
+	"variables": [],
+	"order": [
+		"69570892-4e4b-49d0-b516-ce85325f5259",
+		"c6cc8620-1e06-49e7-a2fe-256507efce6a",
+		"00edd805-ff7d-42ce-a452-a21087129913",
+		"062d075e-fa59-42b1-815a-0f912d030dc6",
+		"bda27ecb-d5a2-4ca2-8e18-b28267e18937",
+		"fd44a2aa-3a93-4381-be9f-05c652806c2f"
+	],
+	"folders_order": [],
+	"folders": [],
+	"requests": [
+		{
+			"id": "00edd805-ff7d-42ce-a452-a21087129913",
+			"name": "Debit Account",
+			"url": "localhost:8080/api/v1/accounts/savings/debit",
+			"description": "",
+			"data": [],
+			"dataMode": "raw",
+			"headerData": [
+				{
+					"key": "Content-Type",
+					"value": "application/json",
+					"description": "",
+					"enabled": true
+				},
+				{
+					"key": "Authorization",
+					"value": "Basic cGF5Zmx1eDpzZWNyZXQ=",
+					"description": "",
+					"enabled": true
+				}
+			],
+			"method": "POST",
+			"pathVariableData": [],
+			"queryParams": [],
+			"auth": {
+				"type": "basic",
+				"basic": [
+					{
+						"key": "username",
+						"value": "{{client}}",
+						"type": "string"
+					},
+					{
+						"key": "password",
+						"value": "{{secret}}",
+						"type": "string"
+					},
+					{
+						"key": "saveHelperData",
+						"value": true,
+						"type": "boolean"
+					},
+					{
+						"key": "showPassword",
+						"value": false,
+						"type": "boolean"
+					}
+				]
+			},
+			"events": null,
+			"folder": null,
+			"rawModeData": "{\n        \"debitAccountId\": \"1\",\n        \"amount\": 5\n}",
+			"headers": "Content-Type: application/json\nAuthorization: Basic cGF5Zmx1eDpzZWNyZXQ=\n",
+			"pathVariables": {}
+		},
+		{
+			"id": "062d075e-fa59-42b1-815a-0f912d030dc6",
+			"name": "Transfer",
+			"url": "localhost:8080/api/v1/accounts/savings/transfer",
+			"description": "",
+			"data": [],
+			"dataMode": "raw",
+			"headerData": [
+				{
+					"key": "Content-Type",
+					"value": "application/json",
+					"description": "",
+					"enabled": true
+				},
+				{
+					"key": "Authorization",
+					"value": "Basic cGF5Zmx1eDpzZWNyZXQ=",
+					"description": "",
+					"enabled": true
+				}
+			],
+			"method": "POST",
+			"pathVariableData": [],
+			"queryParams": [],
+			"auth": {
+				"type": "basic",
+				"basic": [
+					{
+						"key": "username",
+						"value": "{{client}}",
+						"type": "string"
+					},
+					{
+						"key": "password",
+						"value": "{{secret}}",
+						"type": "string"
+					},
+					{
+						"key": "saveHelperData",
+						"value": true,
+						"type": "boolean"
+					},
+					{
+						"key": "showPassword",
+						"value": false,
+						"type": "boolean"
+					}
+				]
+			},
+			"events": null,
+			"folder": null,
+			"rawModeData": "{\n        \"debitAccountId\": \"1\",\n        \"creditAccountId\": 3,\n        \"amount\": 5\n}",
+			"headers": "Content-Type: application/json\nAuthorization: Basic cGF5Zmx1eDpzZWNyZXQ=\n",
+			"pathVariables": {}
+		},
+		{
+			"id": "69570892-4e4b-49d0-b516-ce85325f5259",
+			"name": "Create Account",
+			"url": "localhost:8080/api/v1/accounts/savings",
+			"description": "",
+			"data": [],
+			"dataMode": "raw",
+			"headerData": [
+				{
+					"key": "Content-Type",
+					"value": "application/json",
+					"description": "",
+					"enabled": true
+				},
+				{
+					"key": "Authorization",
+					"value": "Basic cGF5Zmx1eDpzZWNyZXQ=",
+					"description": "",
+					"enabled": true
+				}
+			],
+			"method": "POST",
+			"pathVariableData": [],
+			"queryParams": [],
+			"auth": {
+				"type": "basic",
+				"basic": [
+					{
+						"key": "username",
+						"value": "{{client}}",
+						"type": "string"
+					},
+					{
+						"key": "password",
+						"value": "{{secret}}",
+						"type": "string"
+					},
+					{
+						"key": "saveHelperData",
+						"value": true,
+						"type": "boolean"
+					},
+					{
+						"key": "showPassword",
+						"value": false,
+						"type": "boolean"
+					}
+				]
+			},
+			"events": null,
+			"folder": null,
+			"rawModeData": "{\n        \"name\": \"test-account\",\n        \"balance\": 100\n}",
+			"headers": "Content-Type: application/json\nAuthorization: Basic cGF5Zmx1eDpzZWNyZXQ=\n",
+			"pathVariables": {}
+		},
+		{
+			"id": "bda27ecb-d5a2-4ca2-8e18-b28267e18937",
+			"name": "Get all  accounts",
+			"url": "localhost:8080/api/v1/accounts/savings",
+			"description": "",
+			"data": [],
+			"dataMode": "raw",
+			"headerData": [
+				{
+					"key": "Content-Type",
+					"value": "application/json",
+					"description": "",
+					"enabled": true
+				},
+				{
+					"key": "Authorization",
+					"value": "Basic cGF5Zmx1eDpzZWNyZXQ=",
+					"description": "",
+					"enabled": true
+				}
+			],
+			"method": "GET",
+			"pathVariableData": [],
+			"queryParams": [],
+			"auth": {
+				"type": "basic",
+				"basic": [
+					{
+						"key": "username",
+						"value": "{{client}}",
+						"type": "string"
+					},
+					{
+						"key": "password",
+						"value": "{{secret}}",
+						"type": "string"
+					},
+					{
+						"key": "saveHelperData",
+						"value": true,
+						"type": "boolean"
+					},
+					{
+						"key": "showPassword",
+						"value": false,
+						"type": "boolean"
+					}
+				]
+			},
+			"events": null,
+			"folder": null,
+			"rawModeData": "{\n        \"firstName\": \"Saurabh\",\n        \"lastName\": \"Rawal\",\n        \"userName\": \"srawal17\",\n        \"role\": \"admin\",\n        \"enabled\": false,\n        \"email\": \"srk1@gmail.com\",\n        \"msisdn\": null,\n        \"password\": \"password\"\n}",
+			"headers": "Content-Type: application/json\nAuthorization: Basic cGF5Zmx1eDpzZWNyZXQ=\n",
+			"pathVariables": {}
+		},
+		{
+			"id": "c6cc8620-1e06-49e7-a2fe-256507efce6a",
+			"name": "Credit Account",
+			"url": "localhost:8080/api/v1/accounts/savings/credit",
+			"description": "",
+			"data": [],
+			"dataMode": "raw",
+			"headerData": [
+				{
+					"key": "Content-Type",
+					"value": "application/json",
+					"description": "",
+					"enabled": true
+				},
+				{
+					"key": "Authorization",
+					"value": "Basic cGF5Zmx1eDpzZWNyZXQ=",
+					"description": "",
+					"enabled": true
+				}
+			],
+			"method": "POST",
+			"pathVariableData": [],
+			"queryParams": [],
+			"auth": {
+				"type": "basic",
+				"basic": [
+					{
+						"key": "username",
+						"value": "{{client}}",
+						"type": "string"
+					},
+					{
+						"key": "password",
+						"value": "{{secret}}",
+						"type": "string"
+					},
+					{
+						"key": "saveHelperData",
+						"value": true,
+						"type": "boolean"
+					},
+					{
+						"key": "showPassword",
+						"value": false,
+						"type": "boolean"
+					}
+				]
+			},
+			"events": null,
+			"folder": null,
+			"rawModeData": "{\n        \"transactionType\": \"CREDIT\",\n        \"creditAccountId\": \"1\",\n        \"amount\": 100\n}",
+			"headers": "Content-Type: application/json\nAuthorization: Basic cGF5Zmx1eDpzZWNyZXQ=\n",
+			"pathVariables": {}
+		},
+		{
+			"id": "fd44a2aa-3a93-4381-be9f-05c652806c2f",
+			"name": "Get all transactions",
+			"url": "localhost:8080/api/v1/accounts/savings/transactions",
+			"description": "",
+			"data": [],
+			"dataMode": "raw",
+			"headerData": [
+				{
+					"key": "Content-Type",
+					"value": "application/json",
+					"description": "",
+					"enabled": false
+				},
+				{
+					"key": "Authorization",
+					"value": "Basic cGF5Zmx1eDpzZWNyZXQ=",
+					"description": "",
+					"enabled": false
+				}
+			],
+			"method": "GET",
+			"pathVariableData": [],
+			"queryParams": [],
+			"auth": {
+				"type": "basic",
+				"basic": [
+					{
+						"key": "username",
+						"value": "{{client}}",
+						"type": "string"
+					},
+					{
+						"key": "password",
+						"value": "{{secret}}",
+						"type": "string"
+					},
+					{
+						"key": "saveHelperData",
+						"value": true,
+						"type": "boolean"
+					},
+					{
+						"key": "showPassword",
+						"value": false,
+						"type": "boolean"
+					}
+				]
+			},
+			"events": null,
+			"folder": null,
+			"rawModeData": "{\n        \"firstName\": \"Saurabh\",\n        \"lastName\": \"Rawal\",\n        \"userName\": \"srawal17\",\n        \"role\": \"admin\",\n        \"enabled\": false,\n        \"email\": \"srk1@gmail.com\",\n        \"msisdn\": null,\n        \"password\": \"password\"\n}",
+			"headers": "//Content-Type: application/json\n//Authorization: Basic cGF5Zmx1eDpzZWNyZXQ=\n",
+			"pathVariables": {}
+		}
+	]
+}
